@@ -31,16 +31,13 @@ export default function Navbar() {
       // Check if at top (increased threshold for better detection)
       setIsAtTop(currentScrollY < 10);
 
-      // Show/hide based on scroll direction
+      // Only show navbar when at the top, hide when scrolling in any direction
       if (currentScrollY < 10) {
-        // Always show when at top
+        // Show when at top
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollY.current) {
-        // Scrolling down - hide navbar
+      } else {
+        // Hide when scrolled down (regardless of scroll direction)
         setIsVisible(false);
-      } else if (currentScrollY < lastScrollY.current) {
-        // Scrolling up - show navbar
-        setIsVisible(true);
       }
 
       lastScrollY.current = currentScrollY;

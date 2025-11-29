@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
+import ScrollIndicator from "@/app/components/ScrollIndicator";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -73,16 +73,6 @@ export default function Hero() {
             delay: 1.8,
           }
         );
-
-        // Continuous bounce animation
-        gsap.to(scrollIndicatorRef.current, {
-          y: "+=10",
-          duration: 0.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "power1.inOut",
-          delay: 2.5,
-        });
       }
     }, heroRef);
 
@@ -138,23 +128,21 @@ export default function Hero() {
         </p>
 
 
-        <p className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-12">
+        {/* <p className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-12">
           أسواق تهامة - Experience quality, freshness, and exceptional service
-        </p>
+        </p> */}
       </div>
 
       {/* Scroll Indicator */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-40 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer z-20"
-        onClick={() => {
-          document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
-        }}
+        className="absolute bottom-40 left-1/2 transform -translate-x-1/2 z-20"
       >
-        <span className="text-accent text-sm font-medium tracking-wider uppercase">
-          Scroll to Explore
-        </span>
-        <FiChevronDown className="text-accent text-3xl" />
+        <ScrollIndicator
+          onClick={() => {
+            document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
       </div>
     </section>
   );
