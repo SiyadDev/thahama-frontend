@@ -1,0 +1,55 @@
+{
+  "branches": [
+    {
+      "id": 1,
+      "name": "Al-Hamdaniyah Branch",
+      "nameArabic": "فرع الحمدانية",
+      "city": "Jeddah",
+      "address": "Al-Hamdaniyah District, Jeddah",
+      "phone": "+966 12 234 5678",
+      "hours": "7:00 AM - 12:00 AM",
+      "status": "open"
+    },
+    {
+      "id": 2,
+      "name": "Riyadh Road Branch",
+      "nameArabic": "فرع طريق الرياض",
+      "city": "Jeddah",
+      "address": "Riyadh Road, Jeddah",
+      "phone": "+966 12 345 6789",
+      "hours": "7:00 AM - 12:00 AM",
+      "status": "open"
+    },
+    {
+      "id": 3,
+      "name": "Al-Qahma Branch",
+      "nameArabic": "فرع القحمة",
+      "city": "Al-Qahma",
+      "address": "Al-Qahma, Makkah Province",
+      "phone": "+966 12 456 7890",
+      "hours": "7:00 AM - 11:00 PM",
+      "status": "open"
+    },
+    {
+      "id": 4,
+      "name": "Dubai Mall Branch",
+      "nameArabic": "فرع دبي مول",
+      "city": "Dubai",
+      "address": "Dubai, UAE",
+      "phone": "+971 4 XXX XXXX",
+      "hours": "Coming Soon",
+      "status": "coming_soon"
+    },
+    {
+      "id": 5,
+      "name": "Abu Dhabi Branch",
+      "nameArabic": "فرع أبو ظبي",
+      "city": "Abu Dhabi",
+      "address": "Abu Dhabi, UAE",
+      "phone": "+971 2 XXX XXXX",
+      "hours": "Coming Soon",
+      "status": "coming_soon"
+    }
+  ]
+}
+

@@ -1,0 +1,168 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FiPhone, FiMail, FiMapPin, FiClock } from "react-icons/fi";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function Contact() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Title animation
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current,
+          {
+            opacity: 0,
+            y: 50,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // Content animation
+      if (contentRef.current) {
+        gsap.fromTo(
+          contentRef.current.children,
+          {
+            opacity: 0,
+            y: 40,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: contentRef.current,
+              start: "top 75%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="py-20 md:py-32 bg-light relative overflow-hidden"
+    >
+      {/* Background Decoration */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <h2
+          ref={titleRef}
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-6"
+        >
+          Get in <span className="text-accent">Touch</span>
+        </h2>
+
+        <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
+          Have questions or feedback? We'd love to hear from you!
+        </p>
+
+        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Info */}
+          <div className="space-y-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                  <FiPhone className="text-accent text-2xl" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-lg mb-2">Phone</h3>
+                  <p className="text-gray-600">+966 12 234 5678</p>
+                  <p className="text-gray-600">+966 12 345 6789</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                  <FiMail className="text-accent text-2xl" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-lg mb-2">Email</h3>
+                  <p className="text-gray-600">info@thahama.market</p>
+                  <p className="text-gray-600">support@thahama.market</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                  <FiMapPin className="text-accent text-2xl" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-lg mb-2">Main Office</h3>
+                  <p className="text-gray-600">Al-Hamdaniyah District</p>
+                  <p className="text-gray-600">Jeddah, Saudi Arabia</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                  <FiClock className="text-accent text-2xl" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-lg mb-2">Business Hours</h3>
+                  <p className="text-gray-600">Monday - Sunday</p>
+                  <p className="text-gray-600">7:00 AM - 12:00 AM</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Map Placeholder */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[600px]">
+            <div className="w-full h-full bg-linear-to-br from-primary via-dark to-primary flex items-center justify-center">
+              <div className="text-center text-white p-8">
+                <FiMapPin className="text-accent text-6xl mx-auto mb-4" />
+                <h3 className="text-2xl font-bold mb-2">Location Map</h3>
+                <p className="text-gray-300">Interactive map will be integrated here</p>
+                <button className="mt-6 bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                  Open in Google Maps
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Button */}
+        <div className="text-center mt-16">
+          <button className="bg-primary hover:bg-accent text-white hover:text-primary font-bold px-12 py-4 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+            Visit Us Today
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
