@@ -17,8 +17,10 @@ export default function Home() {
     <>
       <SmoothScroll />
       <Navbar />
-      <main className="overflow-x-hidden">
+      <main className="overflow-x-hidden relative">
         <Hero />
+        {/* Spacer to push content below fixed hero */}
+        <div className="h-screen relative z-10" />
         <About />
         <Services />
         <Branches />

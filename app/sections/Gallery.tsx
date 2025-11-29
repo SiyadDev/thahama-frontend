@@ -98,7 +98,7 @@ export default function Gallery() {
     <section
       id="gallery"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-white relative overflow-hidden"
+      className="py-20 md:py-32 bg-white relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />

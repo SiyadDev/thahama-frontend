@@ -119,7 +119,7 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="pt-16 md:pt-20 pb-12 md:pb-16 bg-light relative overflow-hidden -mt-15 md:-mt-20 rounded-t-3xl z-10"
+      className="pt-16 md:pt-20 pb-12 md:pb-16 bg-light relative overflow-hidden -mt-20 md:-mt-32 rounded-t-3xl z-10"
     >
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />

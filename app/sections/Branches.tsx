@@ -72,7 +72,7 @@ export default function Branches() {
     <section
       id="branches"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-light relative overflow-hidden"
+      className="py-20 md:py-32 bg-light relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />

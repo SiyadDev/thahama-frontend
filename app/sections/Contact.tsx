@@ -67,7 +67,7 @@ export default function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-light relative overflow-hidden"
+      className="py-20 md:py-32 bg-light relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
