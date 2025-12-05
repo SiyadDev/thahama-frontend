@@ -23,6 +23,7 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { FiMenu, FiX } from "react-icons/fi";
+import Image from "next/image";
 
 // Navigation links configuration
 // Static data - could be moved to a config file if needed
@@ -272,10 +273,16 @@ export default function Navbar() {
               e.preventDefault();
               scrollToSection("#home");
             }}
-            className="text-2xl md:text-3xl font-bold"
+            className="flex items-center"
           >
-            <span className="text-white">THAHAMA</span>
-            <span className="text-accent">:market</span>
+            <Image
+              src="/logos/thahama.svg"
+              alt="Thahama Market Logo"
+              width={180}
+              height={128}
+              className="h-10 w-auto md:h-12"
+              priority
+            />
           </a>
 
           {/* Desktop Menu */}

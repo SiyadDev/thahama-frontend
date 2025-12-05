@@ -92,7 +92,7 @@ export default function Contact() {
         </h2>
 
         <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
-          Have questions or feedback? We'd love to hear from you!
+          Have questions or feedback? We&apos;d love to hear from you!
         </p>
 
         <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -169,17 +169,29 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Map Placeholder */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[600px]">
-            <div className="w-full h-full bg-linear-to-br from-primary via-dark to-primary flex items-center justify-center">
-              <div className="text-center text-white p-8">
-                <FiMapPin className="text-accent text-6xl mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Location Map</h3>
-                <p className="text-gray-300">Interactive map will be integrated here</p>
-                <button className="mt-6 bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
-                  Open in Google Maps
-                </button>
-              </div>
+          {/* Map */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[600px] relative">
+            <iframe
+              src="https://www.google.com/maps?q=21.801669569042936, 39.118167442446044&hl=en&z=15&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-full"
+              title="Thahama Market Location"
+            />
+            <div className="absolute bottom-4 right-4 z-10">
+              <a
+                href="https://maps.app.goo.gl/MgYKXXQ9pCEGy3Vd8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-accent hover:bg-accent/90 text-primary font-semibold px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
+              >
+                <FiMapPin className="text-lg" />
+                Open in Google Maps
+              </a>
             </div>
           </div>
         </div>

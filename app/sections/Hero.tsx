@@ -181,13 +181,15 @@ export default function Hero() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
+      
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
         <h1
           ref={titleRef}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 perspective-1000"
+          className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-bold mb-6 perspective-1000 break-words whitespace-normal leading-tight"
         >
-          Thahama Market
+          <span className="text-white">THAHAMA</span>
+          <span className="text-accent">:market</span>
         </h1>
 
         <p
