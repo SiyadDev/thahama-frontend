@@ -253,7 +253,7 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="pt-16 md:pt-20 pb-12 md:pb-16 bg-light relative overflow-hidden -mt-20 md:-mt-32 rounded-t-3xl z-10"
+      className="pt-12 md:pt-20 pb-8 md:pb-16 bg-light relative overflow-hidden -mt-20 md:-mt-32 rounded-t-3xl z-10"
     >
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -261,12 +261,12 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-8"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-8"
         >
           About <span className="text-accent">Thahama Market</span>
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center mb-8 md:mb-12">
           <div ref={contentRef}>
             <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6">
               Who We Are
@@ -347,12 +347,12 @@ export default function About() {
         {/* Stats Grid */}
         <div
           ref={statsRef}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
         >
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="text-center p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className="text-center p-4 md:p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
               <div className="text-2xl md:text-5xl font-bold text-accent mb-2">
                 <span className="stat-number">0</span>

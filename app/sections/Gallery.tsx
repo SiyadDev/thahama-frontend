@@ -409,17 +409,17 @@ export default function Gallery() {
     <section
       id="gallery"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-dark relative overflow-hidden z-10"
+      className="py-12 md:py-32 bg-dark relative overflow-hidden z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-white mb-6"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-white mb-4 md:mb-6"
         >
           Our <span className="text-accent">Gallery</span>
         </h2>
 
-        <p className="text-center text-gray-300 text-lg mb-16 max-w-2xl mx-auto">
+        <p className="text-center text-gray-300 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
           Take a look inside our stores and discover the quality we offer
         </p>
 

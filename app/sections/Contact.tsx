@@ -78,7 +78,7 @@ export default function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-light relative overflow-hidden z-10"
+      className="py-12 md:py-32 bg-light relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
@@ -86,19 +86,19 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-6"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
           Get in <span className="text-accent">Touch</span>
         </h2>
 
-        <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
+        <p className="text-center text-gray-600 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
           Have questions or feedback? We&apos;d love to hear from you!
         </p>
 
-        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
           {/* Contact Info */}
-          <div className="space-y-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          <div className="space-y-4 md:space-y-8">
+            <div className="bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
                   <FiPhone className="text-accent text-2xl" />
@@ -129,7 +129,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
                   <FiMail className="text-accent text-2xl" />
@@ -142,7 +142,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
                   <FiMapPin className="text-accent text-2xl" />
@@ -155,7 +155,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
                   <FiClock className="text-accent text-2xl" />

@@ -104,7 +104,7 @@ export default function FAQ() {
     <section
       id="faq"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-white relative overflow-hidden z-10"
+      className="py-12 md:py-32 bg-white relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -112,16 +112,16 @@ export default function FAQ() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-6"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
           Frequently Asked <span className="text-accent">Questions</span>
         </h2>
 
-        <p className="text-center text-gray-600 text-lg mb-16">
+        <p className="text-center text-gray-600 text-lg mb-8 md:mb-16">
           Got questions? We've got answers!
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {faqs.map((faq) => (
             <div
               key={faq.id}

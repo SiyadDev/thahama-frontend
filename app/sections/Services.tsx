@@ -109,7 +109,7 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="py-20 md:py-32 bg-white relative overflow-hidden z-10"
+      className="py-12 md:py-32 bg-white relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
@@ -117,18 +117,18 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-6"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
           Our <span className="text-accent">Services</span>
         </h2>
 
-        <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
+        <p className="text-center text-gray-600 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
           Everything you need, all in one place. Experience convenience like never before.
         </p>
 
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
         >
           {services.map((service, index) => {
             const Icon = service.icon;
