@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { getOptimizedImagePath, getBlurPlaceholder } from "@/app/lib/image-utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,6 +74,16 @@ export default function About() {
 
             // Clamp scale between 1.0 and 1.6
             const clampedScale = Math.max(1.0, Math.min(1.6, scale));
+
+            // Add will-change when animation is active
+            if (imageRef.current) {
+              if (scrollY > sectionStart && scrollY < sectionEnd) {
+                imageRef.current.style.willChange = "transform";
+              } else {
+                // Remove will-change when animation is complete
+                imageRef.current.style.willChange = "auto";
+              }
+            }
 
             gsap.to(imageRef.current, {
               scale: clampedScale,
@@ -330,15 +341,18 @@ export default function About() {
               ref={imageRef}
               className="absolute inset-0"
               style={{
-                willChange: "transform",
                 transformOrigin: "center center"
               }}
             >
               <Image
-                src="/images/about_image.png"
+                src={getOptimizedImagePath("/images/about_image.png")}
                 alt="About Thahama Market"
                 fill
                 className="object-cover rounded-2xl"
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL={getBlurPlaceholder("about_image")}
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </div>

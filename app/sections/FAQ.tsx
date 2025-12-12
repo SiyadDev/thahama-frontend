@@ -135,7 +135,7 @@ export default function FAQ() {
                   {faq.question}
                 </h3>
                 <FiChevronDown
-                  className={`text-accent text-2xl flex-shrink-0 transition-transform duration-300 ${openId === faq.id ? "rotate-180" : ""
+                  className={`text-accent text-2xl shrink-0 transition-transform duration-300 ${openId === faq.id ? "rotate-180" : ""
                     }`}
                 />
               </button>

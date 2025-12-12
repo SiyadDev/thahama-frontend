@@ -4,8 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
+import dynamic from "next/dynamic";
+import { getOptimizedImagePath, getBlurPlaceholder, getImageSizes } from "@/app/lib/image-utils";
+
+// Lazy load lightbox - only load when user opens it
+const Lightbox = dynamic(
+  () => import("yet-another-react-lightbox").then((mod) => mod.default),
+  {
+    ssr: false, // Don't render on server
+    loading: () => null, // No loading state needed
+  }
+);
+
+// Lazy load lightbox styles
+if (typeof window !== "undefined") {
+  import("yet-another-react-lightbox/styles.css");
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,7 +37,7 @@ interface GalleryItem {
 const galleryItems: GalleryItem[] = [
   {
     id: 1,
-    src: "/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.png",
+    src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.png"),
     alt: "Store Interior",
     isMain: true,
     colSpan: 2,
@@ -32,32 +46,32 @@ const galleryItems: GalleryItem[] = [
   },
   {
     id: 2,
-    src: "/images/Family Shopping for Fresh Produce.png",
+    src: getOptimizedImagePath("/images/Family Shopping for Fresh Produce.png"),
     alt: "Fresh Produce",
     aspectRatio: "wide",
   },
   {
     id: 3,
-    src: "/images/ChatGPT Image Nov 29, 2025, 03_37_33 PM.png",
+    src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 03_37_33 PM.png"),
     alt: "Fresh Bakery Items",
     aspectRatio: "tall",
   },
   {
     id: 4,
-    src: "/images/Untitled design (1).png",
+    src: getOptimizedImagePath("/images/Untitled design (1).png"),
     alt: "Shopping Aisle",
     colSpan: 2,
     aspectRatio: "wide",
   },
   {
     id: 5,
-    src: "/images/ChatGPT Image Nov 29, 2025, 03_52_44 PM.png",
+    src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 03_52_44 PM.png"),
     alt: "Store Entrance",
     aspectRatio: "tall",
   },
   {
     id: 6,
-    src: "/images/about_image.png",
+    src: getOptimizedImagePath("/images/about_image.png"),
     alt: "Checkout Area",
     aspectRatio: "square",
   },
@@ -337,6 +351,15 @@ export default function Gallery() {
           // Clamp scale
           const clampedScale = Math.max(1.0, Math.min(1.15, scale));
 
+          // Add will-change when item is in viewport and animating
+          const isInViewport = itemRect.top < windowHeight && itemRect.bottom > 0;
+          if (isInViewport && proximityRatio > 0.1) {
+            imageWrapper.style.willChange = "transform";
+          } else {
+            // Remove will-change when item is out of viewport or not animating
+            imageWrapper.style.willChange = "auto";
+          }
+
           gsap.to(imageWrapper, {
             scale: clampedScale,
             duration: 0.3,
@@ -442,6 +465,9 @@ export default function Gallery() {
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
                     sizes="256px"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={getBlurPlaceholder(item.src)}
                   />
                   {/* Subtle overlay on hover */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 pointer-events-none rounded-lg" />
@@ -480,7 +506,6 @@ export default function Gallery() {
                 }}
                 className="absolute inset-0 w-full h-full"
                 style={{
-                  willChange: "transform",
                   transformOrigin: "center center",
                 }}
               >
@@ -490,7 +515,10 @@ export default function Gallery() {
                   width={800}
                   height={1200}
                   className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  sizes={getImageSizes({ mobile: "50vw", tablet: "33vw", desktop: "25vw" })}
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL={getBlurPlaceholder(item.src)}
                   style={{
                     height: "auto",
                     display: "block",
@@ -612,13 +640,15 @@ export default function Gallery() {
         }} />
       </div>
 
-      {/* Lightbox */}
-      <Lightbox
-        open={lightboxOpen}
-        close={() => setLightboxOpen(false)}
-        slides={slides}
-        index={currentIndex}
-      />
+      {/* Lightbox - lazy loaded, only renders when open */}
+      {lightboxOpen && (
+        <Lightbox
+          open={lightboxOpen}
+          close={() => setLightboxOpen(false)}
+          slides={slides}
+          index={currentIndex}
+        />
+      )}
     </section>
   );
 }

@@ -37,11 +37,19 @@ const nextConfig: NextConfig = {
   // Compression (enabled by default on Vercel)
   compress: true,
 
+  // Disable source maps in production for smaller builds
+  productionBrowserSourceMaps: false,
+
+  // Standalone output for better deployment (smaller Docker images, faster deployments)
+  output: "standalone",
+
   // Note: swcMinify is enabled by default in Next.js 16, no need to specify
 
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ["gsap", "react-icons"],
+    // Optimize CSS loading
+    optimizeCss: true,
   },
 };
 

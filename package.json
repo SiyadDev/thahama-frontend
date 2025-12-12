@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "gsap": "^3.13.0",
@@ -26,6 +27,7 @@
     "baseline-browser-mapping": "^2.9.3",
     "eslint": "^9",
     "eslint-config-next": "^16.0.7",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

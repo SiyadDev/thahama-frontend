@@ -84,3 +84,21 @@ body {
     opacity: 1;
   }
 }
+
+/* Content visibility optimization for off-screen sections */
+/* Improves initial render performance by skipping layout work for invisible content */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px; /* Estimated height to prevent layout shift */
+}
+
+/* Hero section should always be visible (above fold) */
+section#home {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+/* Ensure sections maintain their layout when content-visibility is active */
+section > * {
+  content-visibility: auto;
+}

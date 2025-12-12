@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import ScrollIndicator from "@/app/components/ScrollIndicator";
+import { getOptimizedImagePath, getBlurPlaceholder } from "@/app/lib/image-utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,10 +41,18 @@ export default function Hero() {
         }
 
         const handleScroll = () => {
-          if (typeof window === "undefined") return;
+          if (typeof window === "undefined" || !imageRef.current) return;
 
           const scrollY = window.scrollY;
           const clampedScale = calculateScale(scrollY);
+
+          // Add will-change when animation is active
+          if (scrollY > 0 && scrollY < 800) {
+            imageRef.current.style.willChange = "transform";
+          } else {
+            // Remove will-change when animation is complete
+            imageRef.current.style.willChange = "auto";
+          }
 
           gsap.to(imageRef.current, {
             scale: clampedScale,
@@ -153,21 +162,20 @@ export default function Hero() {
             ref={imageRef}
             className="absolute inset-0"
             style={{
-              willChange: "transform",
               transformOrigin: "center center",
               transform: "scale(1.25)"
             }}
           >
             <Image
-              // src="/images/Family Shopping for Fresh Produce.png"
-              // src="/images/Untitled design (1).png"
-              // src="/images/ChatGPT Image Nov 29, 2025, 03_52_44 PM.png"
-              src="/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.png"
-              alt="/Family Shopping for Fresh Produce"
+              src={getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.png")}
+              alt="THAHAMA:market - Freshness Everyday"
               fill
               className="object-cover"
               priority
               quality={90}
+              placeholder="blur"
+              blurDataURL={getBlurPlaceholder("ChatGPT Image Nov 29, 2025, 04_01_26 PM")}
+              sizes="100vw"
             />
           </div>
         </div>
