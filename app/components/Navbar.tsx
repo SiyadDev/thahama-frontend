@@ -32,7 +32,7 @@ const navLinks = [
   { name: "About", href: "#about" },
   { name: "Branches", href: "#branches" },
   { name: "Gallery", href: "#gallery" },
-  { name: "Offers", href: "#services" },
+  { name: "Services", href: "#services" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -247,6 +247,14 @@ export default function Navbar() {
    * @param {string} href - Section ID to scroll to (e.g., "#about")
    */
   const scrollToSection = (href: string) => {
+    // Special case for home - scroll to top since hero is fixed
+    if (href === "#home") {
+      // Scroll to top - works with both native smooth scroll and Lenis
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setIsOpen(false);
+      return;
+    }
+
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
