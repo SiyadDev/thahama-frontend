@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
+import { LanguageProvider } from "./i18n/LanguageContext";
+import { cookieName, fallbackLng } from "./i18n/settings";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -63,13 +66,17 @@ export const metadata: Metadata = {
 
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get(cookieName)?.value || fallbackLng;
+  const dir = lang === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="en">
+    <html lang={lang} dir={dir} suppressHydrationWarning>
       <head>
         {/* Preload critical hero image for faster LCP */}
         <link
@@ -84,42 +91,44 @@ export default function RootLayout({
         {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        {/* Font preloading - Next.js will optimize this, but explicit preload helps */}
+        {/* Font preloading - Next.js will optimize this, but explicit hints can help */}
         {/* Note: Next.js font optimization already handles this, but explicit hints can help */}
       </head>
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
-        {/* Structured Data (JSON-LD) for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Store",
-              name: "THAHAMA:market",
-              description: "Fastest-growing supermarket in Saudi Arabia & UAE. Quality products, fresh produce, and exceptional service.",
-              url: process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com",
-              logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/logos/thahama.svg`,
-              image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.webp`,
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "SA",
-                addressLocality: "Jeddah",
-              },
-              priceRange: "$$",
-              servesCuisine: "Grocery",
-              openingHoursSpecification: [
-                {
-                  "@type": "OpeningHoursSpecification",
-                  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-                  opens: "08:00",
-                  closes: "23:00",
+        <LanguageProvider initialLanguage={lang}>
+          {/* Structured Data (JSON-LD) for SEO */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Store",
+                name: "THAHAMA:market",
+                description: "Fastest-growing supermarket in Saudi Arabia & UAE. Quality products, fresh produce, and exceptional service.",
+                url: process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com",
+                logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/logos/thahama.svg`,
+                image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.webp`,
+                address: {
+                  "@type": "PostalAddress",
+                  addressCountry: "SA",
+                  addressLocality: "Jeddah",
                 },
-              ],
-            }),
-          }}
-        />
-        {children}
-        <ServiceWorkerRegistration />
+                priceRange: "$$",
+                servesCuisine: "Grocery",
+                openingHoursSpecification: [
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                    opens: "08:00",
+                    closes: "23:00",
+                  },
+                ],
+              }),
+            }}
+          />
+          {children}
+          <ServiceWorkerRegistration />
+        </LanguageProvider>
       </body>
     </html>
   );

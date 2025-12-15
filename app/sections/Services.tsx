@@ -7,45 +7,41 @@ import { FiShoppingBag, FiTruck, FiCoffee, FiPackage, FiGift, FiHome, FiAward } 
 
 gsap.registerPlugin(ScrollTrigger);
 
+import { useLanguage } from "@/app/i18n/LanguageContext";
+
 const services = [
   {
     icon: FiShoppingBag,
-    title: "In-Store Shopping",
-    description: "Browse our wide selection of quality products in comfortable, modern stores",
+    id: "shopping",
   },
   {
     icon: FiTruck,
-    title: "Fast Home Delivery",
-    description: "Get your groceries delivered fresh to your doorstep in record time",
+    id: "delivery",
   },
   {
     icon: FiCoffee,
-    title: "Fresh Bakery",
-    description: "Daily fresh bread, pastries, and baked goods made with premium ingredients",
+    id: "bakery",
   },
   {
     icon: FiPackage,
-    title: "Fresh Vegetables",
-    description: "Farm-fresh produce delivered daily for maximum freshness and quality",
+    id: "vegetables",
   },
   {
     icon: FiGift,
-    title: "Meat & Seafood",
-    description: "Premium quality meat and fresh seafood from trusted suppliers",
+    id: "meat",
   },
   {
     icon: FiHome,
-    title: "Household Essentials",
-    description: "Everything you need for your home, from cleaning to personal care",
+    id: "household",
   },
   {
     icon: FiAward,
-    title: "Rewards & Loyalty",
-    description: "Earn points with every purchase and enjoy exclusive member benefits",
+    id: "rewards",
   },
 ];
 
 export default function Services() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -119,11 +115,11 @@ export default function Services() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
-          Our <span className="text-accent">Services</span>
+          {t("services.title")} <span className="text-accent">{t("services.titleHighlight")}</span>
         </h2>
 
         <p className="text-center text-gray-600 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
-          Everything you need, all in one place. Experience convenience like never before.
+          {t("services.subtitle")}
         </p>
 
         <div
@@ -147,11 +143,11 @@ export default function Services() {
                   {/* Text content - stacked vertically */}
                   <div className="flex-1 md:flex-none">
                     <h3 className="text-lg md:text-xl font-bold text-primary mb-2 md:mb-3 group-hover:text-accent transition-colors duration-300">
-                      {service.title}
+                      {t(`services.items.${service.id}.title`)}
                     </h3>
 
                     <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-                      {service.description}
+                      {t(`services.items.${service.id}.desc`)}
                     </p>
                   </div>
                 </div>

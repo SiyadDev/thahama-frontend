@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FiPhone, FiMail, FiMapPin, FiClock, FiCheck } from "react-icons/fi";
-import CityMap, { type Location } from "@/app/components/CityMap";
+import CityMap from "@/app/components/CityMap";
+import { useLanguage } from "@/app/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -89,11 +91,11 @@ export default function Contact() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
-          Get in <span className="text-accent">Touch</span>
+          {t("contact.title")} <span className="text-accent">{t("contact.titleHighlight")}</span>
         </h2>
 
         <p className="text-center text-gray-600 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
-          Have questions or feedback? We&apos;d love to hear from you!
+          {t("contact.subtitle")}
         </p>
 
         <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
@@ -105,11 +107,12 @@ export default function Contact() {
                   <FiPhone className="text-accent text-2xl" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-primary text-lg mb-2">Phone</h3>
+                  <h3 className="font-bold text-primary text-lg mb-2">{t("contact.phone")}</h3>
                   <button
                     onClick={() => copyToClipboard("+966 12 234 5678")}
                     className="text-gray-600 hover:text-accent transition-all cursor-pointer flex items-center gap-2 w-full text-left py-1 underline"
                     title="Click to copy"
+                    dir="ltr"
                   >
                     <span className="font-mono">+966 12 234 5678</span>
                     {copiedPhone === "+966 12 234 5678" && (
@@ -120,6 +123,7 @@ export default function Contact() {
                     onClick={() => copyToClipboard("+966 12 345 6789")}
                     className="text-gray-600 hover:text-accent transition-all cursor-pointer flex items-center gap-2 w-full text-left py-1 underline mt-1"
                     title="Click to copy"
+                    dir="ltr"
                   >
                     <span className="font-mono">+966 12 345 6789</span>
                     {copiedPhone === "+966 12 345 6789" && (
@@ -136,7 +140,7 @@ export default function Contact() {
                   <FiMail className="text-accent text-2xl" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-primary text-lg mb-2">Email</h3>
+                  <h3 className="font-bold text-primary text-lg mb-2">{t("contact.email")}</h3>
                   <p className="text-gray-600">info@thahama.market</p>
                   <p className="text-gray-600">support@thahama.market</p>
                 </div>
@@ -149,9 +153,9 @@ export default function Contact() {
                   <FiMapPin className="text-accent text-2xl" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-primary text-lg mb-2">Main Office</h3>
-                  <p className="text-gray-600">Al-Hamdaniyah District</p>
-                  <p className="text-gray-600">Jeddah, Saudi Arabia</p>
+                  <h3 className="font-bold text-primary text-lg mb-2">{t("contact.office")}</h3>
+                  <p className="text-gray-600">{t("contact.addressLine1")}</p>
+                  <p className="text-gray-600">{t("contact.addressLine2")}</p>
                 </div>
               </div>
             </div>
@@ -162,9 +166,9 @@ export default function Contact() {
                   <FiClock className="text-accent text-2xl" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-primary text-lg mb-2">Business Hours</h3>
-                  <p className="text-gray-600">Monday - Sunday</p>
-                  <p className="text-gray-600">7:00 AM - 12:00 AM</p>
+                  <h3 className="font-bold text-primary text-lg mb-2">{t("contact.hours")}</h3>
+                  <p className="text-gray-600">{t("contact.hoursLine1")}</p>
+                  <p className="text-gray-600">{t("contact.hoursLine2")}</p>
                 </div>
               </div>
             </div>
@@ -173,21 +177,14 @@ export default function Contact() {
           {/* Map */}
           <CityMap
             locations={[
-              { city: "Jeddah", lat: 21.4858, lng: 39.1925 },
-              { city: "Al-Qahma", lat: 18.7458, lng: 41.9389 },
-              { city: "Dubai", lat: 25.2048, lng: 55.2708 },
-              { city: "Abu Dhabi", lat: 24.4539, lng: 54.3773 },
+              { city: t("cities.jeddah"), lat: 21.4858, lng: 39.1925 },
+              { city: t("cities.alqahma"), lat: 18.7458, lng: 41.9389 },
+              { city: t("cities.dubai"), lat: 25.2048, lng: 55.2708 },
+              { city: t("cities.abudhabi"), lat: 24.4539, lng: 54.3773 },
             ]}
             defaultCenter={[21.4858, 39.1925]}
             defaultZoom={12}
           />
-        </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-16">
-          <button className="bg-primary hover:bg-accent text-white hover:text-primary font-bold px-12 py-4 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
-            Visit Us Today
-          </button>
         </div>
       </div>
     </section>

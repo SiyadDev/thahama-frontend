@@ -1,0 +1,209 @@
+{
+    "navbar": {
+        "home": "Home",
+        "about": "About",
+        "branches": "Branches",
+        "gallery": "Gallery",
+        "services": "Services",
+        "contact": "Contact"
+    },
+    "footer": {
+        "tagline": "Fastest-growing supermarket in Saudi Arabia & UAE",
+        "description": "Thahama Markets",
+        "quickLinks": "Quick Links",
+        "aboutUs": "About Us",
+        "ourServices": "Our Services",
+        "branches": "Branches",
+        "gallery": "Gallery",
+        "contactUs": "Contact Us",
+        "address": "Jeddah, Saudi Arabia",
+        "openingHours": "Opening Hours",
+        "hours": "Daily: 7:00 AM - 12:00 AM",
+        "rights": "All rights reserved."
+    },
+    "hero": {
+        "freshness": "Freshness Everyday"
+    },
+    "about": {
+        "title": "About",
+        "titleHighlight": "Thahama Market",
+        "whoWeAre": "Who We Are",
+        "p1": "THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE, dedicated to providing the highest quality products and exceptional customer service.",
+        "p2": "Our commitment to freshness, quality, and community has made us a trusted name across the region. From fresh produce to household essentials, we ensure every product meets our rigorous standards.",
+        "p3": "With multiple branches strategically located throughout Jeddah and expanding to the UAE, we're bringing premium shopping experiences closer to you.",
+        "readMore": "Read More",
+        "readLess": "Read Less",
+        "stats": {
+            "branches": "Branches",
+            "customers": "Happy Customers",
+            "experience": "Years Experience",
+            "products": "Products"
+        }
+    },
+    "services": {
+        "title": "Our",
+        "titleHighlight": "Services",
+        "subtitle": "Everything you need, all in one place. Experience convenience like never before.",
+        "items": {
+            "shopping": {
+                "title": "In-Store Shopping",
+                "desc": "Browse our wide selection of quality products in comfortable, modern stores"
+            },
+            "delivery": {
+                "title": "Fast Home Delivery",
+                "desc": "Get your groceries delivered fresh to your doorstep in record time"
+            },
+            "bakery": {
+                "title": "Fresh Bakery",
+                "desc": "Daily fresh bread, pastries, and baked goods made with premium ingredients"
+            },
+            "vegetables": {
+                "title": "Fresh Vegetables",
+                "desc": "Farm-fresh produce delivered daily for maximum freshness and quality"
+            },
+            "meat": {
+                "title": "Meat & Seafood",
+                "desc": "Premium quality meat and fresh seafood from trusted suppliers"
+            },
+            "household": {
+                "title": "Household Essentials",
+                "desc": "Everything you need for your home, from cleaning to personal care"
+            },
+            "rewards": {
+                "title": "Rewards & Loyalty",
+                "desc": "Earn points with every purchase and enjoy exclusive member benefits"
+            }
+        }
+    },
+    "branches": {
+        "title": "Our",
+        "titleHighlight": "Branches",
+        "subtitle": "Visit us at any of our conveniently located branches across Saudi Arabia and UAE",
+        "status": {
+            "open": "Open Now",
+            "comingSoon": "Coming Soon"
+        },
+        "stayTuned": "Stay tuned for opening date!",
+        "getDirections": "Get Directions",
+        "items": {
+            "hamdaniyah": {
+                "name": "Al-Hamdaniyah Branch",
+                "city": "Jeddah",
+                "address": "Al-Hamdaniyah District, Jeddah",
+                "hours": "7:00 AM - 12:00 AM"
+            },
+            "riyadh": {
+                "name": "Riyadh Road Branch",
+                "city": "Jeddah",
+                "address": "Riyadh Road, Jeddah",
+                "hours": "7:00 AM - 12:00 AM"
+            },
+            "qahma": {
+                "name": "Al-Qahma Branch",
+                "city": "Al-Qahma",
+                "address": "Al-Qahma, Makkah Province",
+                "hours": "7:00 AM - 11:00 PM"
+            },
+            "dubai": {
+                "name": "Dubai Mall Branch",
+                "city": "Dubai",
+                "address": "Dubai, UAE",
+                "hours": "Coming Soon"
+            },
+            "abuDhabi": {
+                "name": "Abu Dhabi Branch",
+                "city": "Abu Dhabi",
+                "address": "Abu Dhabi, UAE",
+                "hours": "Coming Soon"
+            }
+        }
+    },
+    "gallery": {
+        "title": "Our",
+        "titleHighlight": "Gallery",
+        "subtitle": "Take a look inside our stores and discover the quality we offer",
+        "items": {
+            "interior": "Store Interior",
+            "produce": "Fresh Produce",
+            "bakery": "Fresh Bakery Items",
+            "aisle": "Shopping Aisle",
+            "entrance": "Store Entrance",
+            "checkout": "Checkout Area"
+        }
+    },
+    "testimonials": {
+        "title": "What Our",
+        "titleHighlight": "Customers Say",
+        "subtitle": "Join thousands of satisfied customers who trust us for their daily needs",
+        "tapToRead": "Tap to read more",
+        "roles": {
+            "regular": "Regular Customer",
+            "loyal": "Loyal Member",
+            "happy": "Happy Shopper",
+            "verified": "Verified Buyer"
+        },
+        "items": {
+            "ahmed": "Best supermarket in Jeddah! Fresh products, excellent service, and great prices. My family shops here every week.",
+            "fatima": "The home delivery service is amazing! Always on time and products are always fresh. The rewards program is a bonus!",
+            "khalid": "I love the bakery section! Fresh bread every morning and the staff is always helpful and friendly.",
+            "sara": "Clean store, organized aisles, and quality products. Thahama Market has become our go-to grocery store.",
+            "mohammed": "Excellent variety of products and competitive prices. The meat and seafood section is outstanding!"
+        }
+    },
+    "faq": {
+        "title": "Frequently Asked",
+        "titleHighlight": "Questions",
+        "subtitle": "Got questions? We've got answers!",
+        "items": {
+            "hours": {
+                "q": "What are your store opening hours?",
+                "a": "Most of our branches are open from 7:00 AM to 12:00 AM daily. However, hours may vary by location. Please check the specific branch details for exact timings."
+            },
+            "delivery": {
+                "q": "Do you offer home delivery?",
+                "a": "Yes! We offer fast and reliable home delivery services. You can place orders through our website or by calling your nearest branch. Delivery is available within designated areas."
+            },
+            "rewards": {
+                "q": "Is there a loyalty rewards program?",
+                "a": "Absolutely! Our rewards program allows you to earn points with every purchase. Points can be redeemed for discounts and exclusive offers. Sign up at any of our branches or online."
+            },
+            "freshness": {
+                "q": "How do you ensure product freshness?",
+                "a": "We receive daily deliveries of fresh produce, meat, seafood, and bakery items. Our strict quality control measures ensure that only the freshest products reach our shelves."
+            },
+            "payment": {
+                "q": "Do you accept online payments?",
+                "a": "Yes, we accept various payment methods including credit/debit cards, mobile payments, and cash on delivery for online orders."
+            },
+            "returns": {
+                "q": "Can I return or exchange products?",
+                "a": "We have a customer-friendly return policy. If you're not satisfied with a product, you can return it within 48 hours with a valid receipt, subject to our terms and conditions."
+            }
+        }
+    },
+    "contact": {
+        "title": "Get in",
+        "titleHighlight": "Touch",
+        "subtitle": "We're here to help and answer any question you might have. We look forward to hearing from you.",
+        "phone": "Phone",
+        "phoneSub": "Mon-Fri from 8am to 5pm",
+        "email": "Email",
+        "emailSub": "Online support 24/7",
+        "office": "Main Office",
+        "addressLine1": "King Abdulaziz Road, Al Hamra District",
+        "addressLine2": "Jeddah, Saudi Arabia",
+        "hours": "Business Hours",
+        "hoursLine1": "Daily: 7:00 AM - 12:00 AM",
+        "hoursLine2": "Some branches open 24/7",
+        "ctaTitle": "Visit Us Today",
+        "ctaText": "Find the nearest Thahama Market branch and experience the quality yourself. We are always around the corner.",
+        "ctaButton": "Find Nearest Branch",
+        "socialTitle": "Follow us on social media"
+    },
+    "cities": {
+        "jeddah": "Jeddah",
+        "alqahma": "Al-Qahma",
+        "dubai": "Dubai",
+        "abudhabi": "Abu Dhabi"
+    }
+}

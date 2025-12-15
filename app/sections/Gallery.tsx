@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { getOptimizedImagePath, getBlurPlaceholder, getImageSizes } from "@/app/lib/image-utils";
+import { useLanguage } from "@/app/i18n/LanguageContext";
 
 // Lazy load lightbox - only load when user opens it
 const Lightbox = dynamic(
@@ -25,9 +26,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Gallery images with layout configuration
 interface GalleryItem {
-  id: number;
+  id: string; // Changed to string for translation keys
   src: string;
-  alt: string;
   isMain?: boolean; // Main hero image
   colSpan?: number; // Columns to span
   rowSpan?: number; // Rows to span
@@ -36,48 +36,43 @@ interface GalleryItem {
 
 const galleryItems: GalleryItem[] = [
   {
-    id: 1,
+    id: "interior",
     src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.png"),
-    alt: "Store Interior",
     isMain: true,
     colSpan: 2,
     rowSpan: 2,
     aspectRatio: "square",
   },
   {
-    id: 2,
+    id: "produce",
     src: getOptimizedImagePath("/images/Family Shopping for Fresh Produce.png"),
-    alt: "Fresh Produce",
     aspectRatio: "wide",
   },
   {
-    id: 3,
+    id: "bakery",
     src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 03_37_33 PM.png"),
-    alt: "Fresh Bakery Items",
     aspectRatio: "tall",
   },
   {
-    id: 4,
+    id: "aisle",
     src: getOptimizedImagePath("/images/Untitled design (1).png"),
-    alt: "Shopping Aisle",
     colSpan: 2,
     aspectRatio: "wide",
   },
   {
-    id: 5,
+    id: "entrance",
     src: getOptimizedImagePath("/images/ChatGPT Image Nov 29, 2025, 03_52_44 PM.png"),
-    alt: "Store Entrance",
     aspectRatio: "tall",
   },
   {
-    id: 6,
+    id: "checkout",
     src: getOptimizedImagePath("/images/about_image.png"),
-    alt: "Checkout Area",
     aspectRatio: "square",
   },
 ];
 
 export default function Gallery() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -168,7 +163,7 @@ export default function Gallery() {
         );
       }
 
-      // Gallery items animation - fade in and slide up with stagger
+      // Grid items animation
       if (gridRef.current) {
         const items = gridRef.current.querySelectorAll(".gallery-item");
 
@@ -176,17 +171,19 @@ export default function Gallery() {
           items,
           {
             opacity: 0,
-            y: 40,
+            y: 50,
+            scale: 0.9,
           },
           {
             opacity: 1,
             y: 0,
+            scale: 1,
             duration: 0.8,
             stagger: 0.1,
-            ease: "power2.out",
+            ease: "power3.out",
             scrollTrigger: {
               trigger: gridRef.current,
-              start: "top 75%",
+              start: "top 70%",
               toggleActions: "play none none none",
             },
           }
@@ -318,77 +315,9 @@ export default function Gallery() {
         window.addEventListener("resize", handleResize);
       }
 
-      // Parallax zoom effect for all gallery images (desktop only)
-      const handleGalleryScroll = () => {
-        if (typeof window !== "undefined" && window.innerWidth < 768) return; // Skip on mobile
-
-        const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-
-        imageRefs.current.forEach((imageWrapper, index) => {
-          if (!imageWrapper) return;
-
-          const item = itemRefs.current[index];
-          if (!item) return;
-
-          const itemRect = item.getBoundingClientRect();
-          const itemTop = itemRect.top + scrollY;
-          const itemHeight = itemRect.height;
-
-          // Calculate when item enters viewport
-          const itemCenter = itemTop + itemHeight / 2;
-          const viewportCenter = scrollY + windowHeight / 2;
-
-          // Calculate distance from viewport center
-          const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
-          const maxDistance = windowHeight;
-
-          // Calculate scale based on proximity to viewport center
-          // Closer to center = more zoomed in (1.15), further = less zoomed (1.0)
-          const proximityRatio = Math.max(0, 1 - distanceFromCenter / maxDistance);
-          const scale = 1.0 + proximityRatio * 0.15; // Scale between 1.0 and 1.15
-
-          // Clamp scale
-          const clampedScale = Math.max(1.0, Math.min(1.15, scale));
-
-          // Add will-change when item is in viewport and animating
-          const isInViewport = itemRect.top < windowHeight && itemRect.bottom > 0;
-          if (isInViewport && proximityRatio > 0.1) {
-            imageWrapper.style.willChange = "transform";
-          } else {
-            // Remove will-change when item is out of viewport or not animating
-            imageWrapper.style.willChange = "auto";
-          }
-
-          gsap.to(imageWrapper, {
-            scale: clampedScale,
-            duration: 0.3,
-            ease: "power1.out",
-          });
-        });
-      };
-
-      // Throttled scroll handler for gallery parallax (desktop only)
-      let galleryTicking = false;
-      const galleryScrollHandler = () => {
-        if (!galleryTicking && typeof window !== "undefined" && window.innerWidth >= 768) {
-          window.requestAnimationFrame(() => {
-            handleGalleryScroll();
-            galleryTicking = false;
-          });
-          galleryTicking = true;
-        }
-      };
-
-      if (typeof window !== "undefined" && window.innerWidth >= 768) {
-        window.addEventListener("scroll", galleryScrollHandler, { passive: true });
-        handleGalleryScroll();
-      }
-
       return () => {
         clearTimeout(timeoutId);
         if (typeof window !== "undefined") {
-          window.removeEventListener("scroll", galleryScrollHandler);
           window.removeEventListener("resize", handleResize);
         }
         if (animationRef.current) {
@@ -406,6 +335,81 @@ export default function Gallery() {
     return () => ctx.revert();
   }, []);
 
+  // Parallax zoom effect for all gallery images (desktop only)
+  const handleGalleryScroll = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) return; // Skip on mobile
+
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+
+    imageRefs.current.forEach((imageWrapper, index) => {
+      if (!imageWrapper) return;
+
+      const item = itemRefs.current[index];
+      if (!item) return;
+
+      const itemRect = item.getBoundingClientRect();
+      const itemTop = itemRect.top + scrollY;
+      const itemHeight = itemRect.height;
+
+      // Calculate when item enters viewport
+      const itemCenter = itemTop + itemHeight / 2;
+      const viewportCenter = scrollY + windowHeight / 2;
+
+      // Calculate distance from viewport center
+      const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
+      const maxDistance = windowHeight;
+
+      // Calculate scale based on proximity to viewport center
+      // Closer to center = more zoomed in (1.15), further = less zoomed (1.0)
+      const proximityRatio = Math.max(0, 1 - distanceFromCenter / maxDistance);
+      const scale = 1.0 + proximityRatio * 0.15; // Scale between 1.0 and 1.15
+
+      // Clamp scale
+      const clampedScale = Math.max(1.0, Math.min(1.15, scale));
+
+      // Add will-change when item is in viewport and animating
+      const isInViewport = itemRect.top < windowHeight && itemRect.bottom > 0;
+      if (isInViewport && proximityRatio > 0.1) {
+        imageWrapper.style.willChange = "transform";
+      } else {
+        // Remove will-change when item is out of viewport or not animating
+        imageWrapper.style.willChange = "auto";
+      }
+
+      gsap.to(imageWrapper, {
+        scale: clampedScale,
+        duration: 0.3,
+        ease: "power1.out",
+      });
+    });
+  };
+
+  // Throttled scroll handler for gallery parallax (desktop only)
+  useEffect(() => {
+    let galleryTicking = false;
+    const galleryScrollHandler = () => {
+      if (!galleryTicking && typeof window !== "undefined" && window.innerWidth >= 768) {
+        window.requestAnimationFrame(() => {
+          handleGalleryScroll();
+          galleryTicking = false;
+        });
+        galleryTicking = true;
+      }
+    };
+
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      window.addEventListener("scroll", galleryScrollHandler, { passive: true });
+      handleGalleryScroll();
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", galleryScrollHandler);
+      }
+    };
+  }, []);
+
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
     setLightboxOpen(true);
@@ -414,7 +418,7 @@ export default function Gallery() {
   // Generate slides for lightbox
   const slides = galleryItems.map((item) => ({
     src: item.src,
-    alt: item.alt,
+    alt: t(`gallery.items.${item.id}`),
   }));
 
   // Get aspect ratio class - only use on mobile, desktop uses natural heights for masonry
@@ -439,11 +443,11 @@ export default function Gallery() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-white mb-4 md:mb-6"
         >
-          Our <span className="text-accent">Gallery</span>
+          {t("gallery.title")} <span className="text-accent">{t("gallery.titleHighlight")}</span>
         </h2>
 
         <p className="text-center text-gray-300 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
-          Take a look inside our stores and discover the quality we offer
+          {t("gallery.subtitle")}
         </p>
 
         {/* Mobile: Horizontal Scrolling Carousel */}
@@ -461,7 +465,7 @@ export default function Gallery() {
                 <div className="aspect-square relative">
                   <Image
                     src={item.src}
-                    alt={item.alt}
+                    alt={t(`gallery.items.${item.id}`)}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
                     sizes="256px"
@@ -511,7 +515,7 @@ export default function Gallery() {
               >
                 <Image
                   src={item.src}
-                  alt={item.alt}
+                  alt={t(`gallery.items.${item.id}`)}
                   width={800}
                   height={1200}
                   className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
@@ -652,4 +656,3 @@ export default function Gallery() {
     </section>
   );
 }
-

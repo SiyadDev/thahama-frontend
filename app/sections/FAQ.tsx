@@ -7,43 +7,18 @@ import { FiChevronDown } from "react-icons/fi";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const faqs = [
-  {
-    id: 1,
-    question: "What are your store opening hours?",
-    answer: "Most of our branches are open from 7:00 AM to 12:00 AM daily. However, hours may vary by location. Please check the specific branch details for exact timings.",
-  },
-  {
-    id: 2,
-    question: "Do you offer home delivery?",
-    answer: "Yes! We offer fast and reliable home delivery services. You can place orders through our website or by calling your nearest branch. Delivery is available within designated areas.",
-  },
-  {
-    id: 3,
-    question: "Is there a loyalty rewards program?",
-    answer: "Absolutely! Our rewards program allows you to earn points with every purchase. Points can be redeemed for discounts and exclusive offers. Sign up at any of our branches or online.",
-  },
-  {
-    id: 4,
-    question: "How do you ensure product freshness?",
-    answer: "We receive daily deliveries of fresh produce, meat, seafood, and bakery items. Our strict quality control measures ensure that only the freshest products reach our shelves.",
-  },
-  {
-    id: 5,
-    question: "Do you accept online payments?",
-    answer: "Yes, we accept various payment methods including credit/debit cards, mobile payments, and cash on delivery for online orders.",
-  },
-  {
-    id: 6,
-    question: "Can I return or exchange products?",
-    answer: "We have a customer-friendly return policy. If you're not satisfied with a product, you can return it within 48 hours with a valid receipt, subject to our terms and conditions.",
-  },
-];
+import { useLanguage } from "@/app/i18n/LanguageContext";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const faqIds = ["hours", "delivery", "loyalty", "freshness", "payments", "returns"];
 
 export default function FAQ() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const [openId, setOpenId] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -68,37 +43,39 @@ export default function FAQ() {
           }
         );
       }
+
+      // FAQ items animation
+      if (containerRef.current) {
+        const items = containerRef.current.querySelectorAll(".faq-item");
+
+        gsap.fromTo(
+          items,
+          {
+            opacity: 0,
+            y: 30,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top 70%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const toggleFAQ = (id: number) => {
-    setOpenId(openId === id ? null : id);
+  const toggleFAQ = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
-
-  useEffect(() => {
-    faqs.forEach((faq) => {
-      const answer = document.getElementById(`answer-${faq.id}`);
-      if (answer) {
-        if (openId === faq.id) {
-          gsap.to(answer, {
-            height: "auto",
-            opacity: 1,
-            duration: 0.4,
-            ease: "power3.out",
-          });
-        } else {
-          gsap.to(answer, {
-            height: 0,
-            opacity: 0,
-            duration: 0.3,
-            ease: "power3.in",
-          });
-        }
-      }
-    });
-  }, [openId]);
 
   return (
     <section
@@ -107,47 +84,48 @@ export default function FAQ() {
       className="py-12 md:py-32 bg-white relative overflow-hidden z-10"
     >
       {/* Background Decoration */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-full h-full bg-[url('/images/pattern.png')] opacity-[0.03] pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
-          Frequently Asked <span className="text-accent">Questions</span>
+          {t("faq.title")} <span className="text-accent">{t("faq.titleHighlight")}</span>
         </h2>
 
-        <p className="text-center text-gray-600 text-lg mb-8 md:mb-16">
-          Got questions? We've got answers!
+        <p className="text-center text-gray-600 text-lg mb-12 md:mb-20 max-w-2xl mx-auto">
+          {t("faq.subtitle")}
         </p>
 
-        <div className="space-y-3 md:space-y-4">
-          {faqs.map((faq) => (
+        <div ref={containerRef} className="space-y-4">
+          {faqIds.map((id, index) => (
             <div
-              key={faq.id}
-              className="bg-light rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+              key={id}
+              className={`faq-item border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index ? "bg-light shadow-md border-accent/30" : "bg-white hover:border-accent/50"
+                }`}
             >
               <button
-                onClick={() => toggleFAQ(faq.id)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-white transition-colors duration-300"
+                onClick={() => toggleFAQ(index)}
+                className="w-full px-6 py-5 flex items-center justify-between text-left rtl:text-right focus:outline-none"
+                aria-expanded={openIndex === index}
               >
-                <h3 className="text-lg font-semibold text-primary pr-4">
-                  {faq.question}
-                </h3>
-                <FiChevronDown
-                  className={`text-accent text-2xl shrink-0 transition-transform duration-300 ${openId === faq.id ? "rotate-180" : ""
-                    }`}
-                />
+                <span className={`text-lg md:text-xl font-bold transition-colors duration-300 ${openIndex === index ? "text-accent" : "text-primary"
+                  }`}>
+                  {t(`faq.items.${id}.question`)}
+                </span>
+                <span className={`ml-4 rtl:mr-4 rtl:ml-0 transform transition-transform duration-300 text-accent text-xl ${openIndex === index ? "rotate-180" : ""
+                  }`}>
+                  <FiChevronDown />
+                </span>
               </button>
 
               <div
-                id={`answer-${faq.id}`}
-                className="overflow-hidden h-0 opacity-0"
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                  }`}
               >
-                <div className="px-6 pb-6">
-                  <p className="text-gray-600 leading-relaxed">
-                    {faq.answer}
-                  </p>
+                <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                  {t(`faq.items.${id}.answer`)}
                 </div>
               </div>
             </div>

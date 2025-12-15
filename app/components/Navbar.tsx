@@ -24,16 +24,18 @@ import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { FiMenu, FiX } from "react-icons/fi";
 import Image from "next/image";
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 // Navigation links configuration
 // Static data - could be moved to a config file if needed
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Branches", href: "#branches" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Services", href: "#services" },
-  { name: "Contact", href: "#contact" },
+  { name: "home", href: "#home" },
+  { name: "about", href: "#about" },
+  { name: "branches", href: "#branches" },
+  { name: "gallery", href: "#gallery" },
+  { name: "services", href: "#services" },
+  { name: "contact", href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -42,6 +44,7 @@ export default function Navbar() {
   const [isMenuRendered, setIsMenuRendered] = useState(false); // Controls if menu is in DOM for animations
   const [isVisible, setIsVisible] = useState(true); // Navbar visibility (hide/show on scroll)
   const [isAtTop, setIsAtTop] = useState(true); // Whether user is in hero section
+  const { t } = useLanguage();
 
   // Refs for DOM elements and animation tracking
   const navRef = useRef<HTMLElement>(null); // Main navbar element
@@ -305,27 +308,31 @@ export default function Navbar() {
                 }}
                 className="text-white hover:text-accent transition-colors duration-300 font-medium"
               >
-                {link.name}
+                {t(`navbar.${link.name}`)}
               </a>
             ))}
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => {
-              if (!isOpen) {
-                // Set menu to render first, then open (React will batch these)
-                setIsMenuRendered(true);
-                setIsOpen(true);
-              } else {
-                setIsOpen(false);
-              }
-            }}
-            className="md:hidden text-white text-2xl z-50"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <FiX /> : <FiMenu />}
-          </button>
+          <div className="flex items-center gap-4 md:hidden">
+            <LanguageSwitcher />
+            <button
+              onClick={() => {
+                if (!isOpen) {
+                  // Set menu to render first, then open (React will batch these)
+                  setIsMenuRendered(true);
+                  setIsOpen(true);
+                } else {
+                  setIsOpen(false);
+                }
+              }}
+              className="text-white text-2xl z-50"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <FiX /> : <FiMenu />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -364,7 +371,7 @@ export default function Navbar() {
                 }}
                 className="text-white hover:text-accent hover:bg-white/5 transition-all duration-200 text-base font-medium py-3 px-6 active:bg-white/10"
               >
-                {link.name}
+                {t(`navbar.${link.name}`)}
               </a>
             ))}
           </div>

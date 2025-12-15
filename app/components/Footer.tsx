@@ -11,11 +11,13 @@
  */
 import { useState } from "react";
 import { FiPhone, FiMail, FiMapPin, FiFacebook, FiInstagram, FiTwitter, FiCheck } from "react-icons/fi";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Footer() {
   // Get current year for copyright
   const currentYear = new Date().getFullYear();
   const [copiedPhone, setCopiedPhone] = useState(false);
+  const { t } = useLanguage();
 
   const copyToClipboard = async (phone: string) => {
     try {
@@ -38,35 +40,35 @@ export default function Footer() {
               <span className="text-accent">:market</span>
             </h3>
             <p className="text-gray-300 mb-4 leading-relaxed">
-              أسواق تهامة
+              {t("footer.description")}
             </p>
             <p className="text-gray-400 text-sm">
-              Fastest-growing supermarket in Saudi Arabia & UAE
+              {t("footer.tagline")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4 text-accent">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-4 text-accent">{t("footer.quickLinks")}</h4>
             <ul className="space-y-2">
               <li>
                 <a href="#about" className="text-gray-300 hover:text-accent transition-colors">
-                  About Us
+                  {t("footer.aboutUs")}
                 </a>
               </li>
               <li>
                 <a href="#services" className="text-gray-300 hover:text-accent transition-colors">
-                  Our Services
+                  {t("footer.ourServices")}
                 </a>
               </li>
               <li>
                 <a href="#branches" className="text-gray-300 hover:text-accent transition-colors">
-                  Branches
+                  {t("footer.branches")}
                 </a>
               </li>
               <li>
                 <a href="#gallery" className="text-gray-300 hover:text-accent transition-colors">
-                  Gallery
+                  {t("footer.gallery")}
                 </a>
               </li>
             </ul>
@@ -74,7 +76,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-semibold mb-4 text-accent">Contact Us</h4>
+            <h4 className="text-lg font-semibold mb-4 text-accent">{t("footer.contactUs")}</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-gray-300">
                 <FiPhone className="text-accent shrink-0" />
@@ -83,7 +85,7 @@ export default function Footer() {
                   className="hover:text-accent transition-all cursor-pointer flex items-center gap-2 underline"
                   title="Click to copy"
                 >
-                  <span className="font-mono">+966 12 234 5678</span>
+                  <span className="font-mono" dir="ltr">+966 12 234 5678</span>
                   {copiedPhone && (
                     <FiCheck className="text-green-500 text-sm shrink-0" />
                   )}
@@ -95,16 +97,16 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2 text-gray-300">
                 <FiMapPin className="text-accent mt-1" />
-                <span>Jeddah, Saudi Arabia</span>
+                <span>{t("footer.address")}</span>
               </li>
             </ul>
           </div>
 
           {/* Hours & Social */}
           <div>
-            <h4 className="text-lg font-semibold mb-4 text-accent">Opening Hours</h4>
+            <h4 className="text-lg font-semibold mb-4 text-accent">{t("footer.openingHours")}</h4>
             <p className="text-gray-300 mb-6">
-              Daily: 7:00 AM - 12:00 AM
+              {t("footer.hours")}
             </p>
             <div className="flex gap-4">
               <a
@@ -131,7 +133,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; {currentYear} THAHAMA:market. All rights reserved.</p>
+          <p>&copy; {currentYear} THAHAMA:market. {t("footer.rights")}</p>
         </div>
       </div>
     </footer>

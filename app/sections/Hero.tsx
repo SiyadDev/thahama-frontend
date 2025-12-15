@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import ScrollIndicator from "@/app/components/ScrollIndicator";
 import { getOptimizedImagePath, getBlurPlaceholder } from "@/app/lib/image-utils";
+import { useLanguage } from "../i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +16,7 @@ export default function Hero() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     let scrollCleanup: (() => void) | null = null;
@@ -189,7 +191,7 @@ export default function Hero() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
-      
+
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
         <h1
@@ -204,7 +206,7 @@ export default function Hero() {
           ref={subtitleRef}
           className="text-xl md:text-2xl lg:text-3xl text-white mb-4 max-w-3xl mx-auto"
         >
-          Freshness Everyday
+          {t("hero.freshness")}
         </p>
 
 

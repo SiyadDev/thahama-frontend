@@ -8,20 +8,23 @@ import { getOptimizedImagePath, getBlurPlaceholder } from "@/app/lib/image-utils
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stats = [
-  { number: 5, suffix: "+", label: "Branches" },
-  { number: 10000, suffix: "+", label: "Happy Customers" },
-  { number: 15, suffix: "+", label: "Years Experience" },
-  { number: 500, suffix: "+", label: "Products" },
-];
+import { useLanguage } from "@/app/i18n/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const stats = [
+    { number: 5, suffix: "+", label: t("about.stats.branches") },
+    { number: 10000, suffix: "+", label: t("about.stats.customers") },
+    { number: 15, suffix: "+", label: t("about.stats.experience") },
+    { number: 500, suffix: "+", label: t("about.stats.products") },
+  ];
 
   useEffect(() => {
     let cleanup: (() => void) | null = null;
@@ -258,7 +261,7 @@ export default function About() {
       if (timeoutId) clearTimeout(timeoutId);
       if (cleanup) cleanup();
     };
-  }, []);
+  }, [stats]); // Add stats to dependency array
 
   return (
     <section
@@ -274,55 +277,47 @@ export default function About() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-8"
         >
-          About <span className="text-accent">Thahama Market</span>
+          {t("about.title")} <span className="text-accent">{t("about.titleHighlight")}</span>
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center mb-8 md:mb-12">
           <div ref={contentRef}>
             <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6">
-              Who We Are
+              {t("about.whoWeAre")}
             </h3>
 
             {/* Desktop: Full text always visible */}
             <div className="hidden lg:block">
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE,
-                dedicated to providing the highest quality products and exceptional customer service.
+                {t("about.p1")}
               </p>
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                Our commitment to freshness, quality, and community has made us a trusted name
-                across the region. From fresh produce to household essentials, we ensure every
-                product meets our rigorous standards.
+                {t("about.p2")}
               </p>
               <p className="text-gray-600 text-lg leading-relaxed">
-                With multiple branches strategically located throughout Jeddah and expanding to the UAE,
-                we&apos;re bringing premium shopping experiences closer to you.
+                {t("about.p3")}
               </p>
             </div>
 
             {/* Mobile: Truncated text with read more */}
             <div className="lg:hidden">
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE,
-                dedicated to providing the highest quality products and exceptional customer service.
+                {t("about.p1")}
               </p>
 
               {isExpanded ? (
                 <>
                   <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                    Our commitment to freshness, quality, and community has made us a trusted name
-                    across the region. From fresh produce to household essentials, we ensure every
-                    product meets our rigorous standards.
+                    {t("about.p2")}
                   </p>
                   <p className="text-gray-600 text-lg leading-relaxed mb-4">
-                    With multiple branches strategically located throughout Jeddah and expanding to the UAE,
-                    we&apos;re bringing premium shopping experiences closer to you.
+                    {t("about.p3")}
                   </p>
                   <button
                     onClick={() => setIsExpanded(false)}
                     className="text-accent font-semibold hover:text-accent/80 transition-colors"
                   >
-                    Read Less
+                    {t("about.readLess")}
                   </button>
                 </>
               ) : (
@@ -330,7 +325,7 @@ export default function About() {
                   onClick={() => setIsExpanded(true)}
                   className="text-accent font-semibold hover:text-accent/80 transition-colors"
                 >
-                  Read More
+                  {t("about.readMore")}
                 </button>
               )}
             </div>

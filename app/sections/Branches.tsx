@@ -4,11 +4,38 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FiMapPin, FiPhone, FiClock, FiCheck } from "react-icons/fi";
-import branchesData from "@/app/data/branches.json";
+import { useLanguage } from "@/app/i18n/LanguageContext";
 
-gsap.registerPlugin(ScrollTrigger);
+const branchesConfig = [
+  {
+    id: "hamdaniyah",
+    phone: "+966 12 234 5678",
+    status: "open",
+  },
+  {
+    id: "riyadh",
+    phone: "+966 12 345 6789",
+    status: "open",
+  },
+  {
+    id: "qahma",
+    phone: "+966 12 456 7890",
+    status: "open",
+  },
+  {
+    id: "dubai",
+    phone: "+971 4 XXX XXXX",
+    status: "coming_soon",
+  },
+  {
+    id: "abuDhabi",
+    phone: "+971 2 XXX XXXX",
+    status: "coming_soon",
+  },
+];
 
 export default function Branches() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -93,18 +120,18 @@ export default function Branches() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
-          Our <span className="text-accent">Branches</span>
+          {t("branches.title")} <span className="text-accent">{t("branches.titleHighlight")}</span>
         </h2>
 
         <p className="text-center text-gray-600 text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
-          Visit us at any of our conveniently located branches across Saudi Arabia and UAE
+          {t("branches.subtitle")}
         </p>
 
         <div
           ref={cardsRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
         >
-          {branchesData.branches.map((branch) => (
+          {branchesConfig.map((branch) => (
             <div
               key={branch.id}
               className={`branch-card group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 ${branch.status === "coming_soon"
@@ -115,28 +142,26 @@ export default function Branches() {
               {/* Status Badge */}
               {branch.status === "coming_soon" && (
                 <div className="inline-block bg-accent text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">
-                  Coming Soon
+                  {t("branches.status.comingSoon")}
                 </div>
               )}
 
               {branch.status === "open" && (
                 <div className="inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
-                  Open Now
+                  {t("branches.status.open")}
                 </div>
               )}
 
               <h3 className="text-2xl font-bold text-primary mb-2 group-hover:text-accent transition-colors duration-300">
-                {branch.name}
+                {t(`branches.items.${branch.id}.name`)}
               </h3>
 
-              <p className="text-gray-500 text-sm mb-6">{branch.nameArabic}</p>
-
-              <div className="space-y-4">
+              <div className="space-y-4 mt-6">
                 <div className="flex items-start gap-3">
                   <FiMapPin className="text-accent text-xl mt-1 shrink-0" />
                   <div>
-                    <p className="font-semibold text-primary">{branch.city}</p>
-                    <p className="text-gray-600 text-sm">{branch.address}</p>
+                    <p className="font-semibold text-primary">{t(`branches.items.${branch.id}.city`)}</p>
+                    <p className="text-gray-600 text-sm">{t(`branches.items.${branch.id}.address`)}</p>
                   </div>
                 </div>
 
@@ -149,7 +174,7 @@ export default function Branches() {
                         className="text-gray-600 hover:text-accent transition-all cursor-pointer flex items-center gap-2 underline"
                         title="Click to copy"
                       >
-                        <span className="font-mono">{branch.phone}</span>
+                        <span className="font-mono" dir="ltr">{branch.phone}</span>
                         {copiedPhone === branch.phone && (
                           <FiCheck className="text-green-500 text-sm shrink-0" />
                         )}
@@ -158,19 +183,19 @@ export default function Branches() {
 
                     <div className="flex items-center gap-3">
                       <FiClock className="text-accent text-xl shrink-0" />
-                      <p className="text-gray-600">{branch.hours}</p>
+                      <p className="text-gray-600">{t(`branches.items.${branch.id}.hours`)}</p>
                     </div>
                   </>
                 )}
 
                 {branch.status === "coming_soon" && (
-                  <p className="text-gray-500 italic">Stay tuned for opening date!</p>
+                  <p className="text-gray-500 italic">{t("branches.stayTuned")}</p>
                 )}
               </div>
 
               {branch.status === "open" && (
                 <button className="mt-6 w-full bg-primary hover:bg-accent text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
-                  Get Directions
+                  {t("branches.getDirections")}
                 </button>
               )}
             </div>

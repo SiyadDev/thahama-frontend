@@ -4,59 +4,57 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FiStar } from "react-icons/fi";
+import Image from "next/image";
+import { useLanguage } from "@/app/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const testimonials = [
+const testimonialsConfig = [
   {
-    id: 1,
+    id: "ahmed",
     name: "Ahmed Al-Shahrani",
     nameArabic: "أحمد الشهراني",
-    role: "Regular Customer",
     rating: 5,
-    text: "Best supermarket in Jeddah! Fresh products, excellent service, and great prices. My family shops here every week.",
+    image: "/images/person1.png", // Placeholder, assuming images exist or using generic
   },
   {
-    id: 2,
+    id: "fatima",
     name: "Fatima Mohammed",
     nameArabic: "فاطمة محمد",
-    role: "Loyal Member",
     rating: 5,
-    text: "The home delivery service is amazing! Always on time and products are always fresh. The rewards program is a bonus!",
+    image: "/images/person2.png",
   },
   {
-    id: 3,
+    id: "khalid",
     name: "Khalid bin Saleh",
     nameArabic: "خالد بن صالح",
-    role: "Happy Shopper",
     rating: 5,
-    text: "I love the bakery section! Fresh bread every morning and the staff is always helpful and friendly.",
+    image: "/images/person3.png",
   },
   {
-    id: 4,
+    id: "sara",
     name: "Sara Abdullah",
     nameArabic: "سارة عبدالله",
-    role: "Verified Buyer",
     rating: 5,
-    text: "Clean store, organized aisles, and quality products. Thahama Market has become our go-to grocery store.",
+    image: "/images/person1.png",
   },
   {
-    id: 5,
+    id: "mohammed",
     name: "Mohammed Al-Ghamdi",
     nameArabic: "محمد الغامدي",
-    role: "Regular Customer",
     rating: 5,
-    text: "Excellent variety of products and competitive prices. The meat and seafood section is outstanding!",
+    image: "/images/person2.png",
   },
 ];
 
 export default function Testimonials() {
+  const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -89,11 +87,17 @@ export default function Testimonials() {
         if (cards.length > 0) {
           const cardWidth = cards[0]?.clientWidth || 0;
           const gap = 32; // 2rem gap
-          const totalWidth = (cardWidth + gap) * testimonials.length;
+          const totalWidth = (cardWidth + gap) * testimonialsConfig.length;
 
-          // Duplicate for seamless loop
-          const clone = carousel.innerHTML;
-          carousel.innerHTML += clone;
+          // Clear existing content to prevent duplicate accumulation on re-renders
+          // We need to be careful here. React manages the DOM. 
+          // If we modify innerHTML, React might lose track.
+          // Instead of innerHTML += clone, let's rely on React to render duplicates if needed, 
+          // OR just accept that for this GSAP implementation we might need to be careful.
+          // For simplicity and robustness with translations, we will NOT clone via innerHTML.
+          // We will render the list TWICE in the JSX.
+
+          gsap.set(carousel, { x: 0 });
 
           // Infinite scroll animation
           const carouselAnimation = gsap.to(carousel, {
@@ -111,7 +115,6 @@ export default function Testimonials() {
           // Function to pause animation
           const pauseAnimation = () => {
             carouselAnimation.timeScale(0);
-            // Clear any existing resume timeout
             if (resumeTimeoutRef.current) {
               clearTimeout(resumeTimeoutRef.current);
             }
@@ -119,11 +122,9 @@ export default function Testimonials() {
 
           // Function to resume animation after delay
           const resumeAnimation = (delay: number = 3000) => {
-            // Clear any existing resume timeout
             if (resumeTimeoutRef.current) {
               clearTimeout(resumeTimeoutRef.current);
             }
-            // Resume after delay
             resumeTimeoutRef.current = setTimeout(() => {
               carouselAnimation.timeScale(1);
             }, delay);
@@ -140,17 +141,15 @@ export default function Testimonials() {
           // Pause on card click/touch and resume after 3 seconds
           const handleCardInteraction = () => {
             pauseAnimation();
-            resumeAnimation(3000); // Resume after 3 seconds
+            resumeAnimation(3000);
           };
 
-          // Add event listeners to all cards (including duplicates)
           const allCards = carousel.querySelectorAll(".testimonial-card");
           allCards.forEach((card) => {
             card.addEventListener("click", handleCardInteraction);
             card.addEventListener("touchstart", handleCardInteraction, { passive: true });
           });
 
-          // Cleanup function
           return () => {
             carousel.removeEventListener("mouseenter", pauseAnimation);
             carousel.removeEventListener("mouseleave", handleMouseLeave);
@@ -172,9 +171,9 @@ export default function Testimonials() {
       }
       ctx.revert();
     };
-  }, []);
+  }, [language]); // Re-run when language changes to update measurements
 
-  const toggleExpanded = (id: number) => {
+  const toggleExpanded = (id: string) => {
     setExpandedIds((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
@@ -185,6 +184,41 @@ export default function Testimonials() {
       return newSet;
     });
   };
+
+  // Helper to render a card
+  const renderCard = (testimonial: typeof testimonialsConfig[0], keyPrefix: string) => (
+    <div
+      key={`${keyPrefix}-${testimonial.id}`}
+      className="testimonial-card shrink-0 w-64 md:w-96 bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+    >
+      {/* Stars */}
+      <div className="flex gap-1 mb-4">
+        {[...Array(testimonial.rating)].map((_, i) => (
+          <FiStar key={i} className="text-accent fill-accent" />
+        ))}
+      </div>
+
+      {/* Testimonial Text */}
+      <p className="text-gray-700 leading-relaxed mb-6 italic">
+        &ldquo;{t(`testimonials.items.${testimonial.id}.text`)}&rdquo;
+      </p>
+
+      {/* Customer Info */}
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0">
+          {testimonial.name.charAt(0)}
+        </div>
+        <div>
+          <h4 className="font-bold text-primary">
+            {language === 'ar' ? testimonial.nameArabic : testimonial.name}
+          </h4>
+          <p className="text-accent text-xs font-medium">
+            {t(`testimonials.items.${testimonial.id}.role`)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <section
@@ -200,20 +234,21 @@ export default function Testimonials() {
           ref={titleRef}
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-6"
         >
-          What Our <span className="text-accent">Customers Say</span>
+          {t("testimonials.title")} <span className="text-accent">{t("testimonials.titleHighlight")}</span>
         </h2>
 
         <p className="text-center text-gray-600 text-lg max-w-2xl mx-auto">
-          Join thousands of satisfied customers who trust us for their daily needs
+          {t("testimonials.subtitle")}
         </p>
       </div>
 
       {/* Mobile: List View with Expandable Cards */}
       <div className="md:hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
-          {testimonials.map((testimonial) => {
+          {testimonialsConfig.map((testimonial) => {
             const isExpanded = expandedIds.has(testimonial.id);
-            const shouldTruncate = !isExpanded && testimonial.text.length > 60;
+            const text = t(`testimonials.items.${testimonial.id}.text`);
+            const shouldTruncate = !isExpanded && text.length > 60;
 
             return (
               <div
@@ -234,24 +269,27 @@ export default function Testimonials() {
                     className={`text-gray-700 leading-relaxed italic ${shouldTruncate ? "line-clamp-3" : ""
                       }`}
                   >
-                    &ldquo;{testimonial.text}&rdquo;
+                    &ldquo;{text}&rdquo;
                   </p>
                   {shouldTruncate && (
-                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-white via-white/70 to-transparent pointer-events-none flex items-end justify-center pb-2">
-                      <span className="text-xs text-gray-500 font-medium">Tap to read more</span>
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none flex items-end justify-center pb-2">
+                      <span className="text-xs text-gray-500 font-medium">{t("testimonials.tapToRead")}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Customer Info */}
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-linear-to-br from-accent to-primary rounded-full flex items-center justify-center text-white text-lg font-bold shrink-0">
+                  <div className="w-12 h-12 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center text-white text-lg font-bold shrink-0">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-primary text-sm">{testimonial.name}</h4>
-                    <p className="text-gray-500 text-xs">{testimonial.nameArabic}</p>
-                    <p className="text-accent text-xs font-medium">{testimonial.role}</p>
+                    <h4 className="font-bold text-primary text-sm">
+                      {language === 'ar' ? testimonial.nameArabic : testimonial.name}
+                    </h4>
+                    <p className="text-accent text-xs font-medium">
+                      {t(`testimonials.items.${testimonial.id}.role`)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -266,43 +304,11 @@ export default function Testimonials() {
           ref={carouselRef}
           className="flex gap-8 will-change-transform"
         >
-          {testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="testimonial-card shrink-0 w-64 md:w-96 bg-white p-5 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
-            >
-              {/* Stars */}
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <FiStar key={i} className="text-accent fill-accent" />
-                ))}
-              </div>
-
-              {/* Testimonial Text */}
-              <p className="text-gray-700 leading-relaxed mb-6 italic">
-                &ldquo;{testimonial.text}&rdquo;
-              </p>
-
-              {/* Customer Info */}
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-linear-to-br from-accent to-primary rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0">
-                  {testimonial.name.charAt(0)}
-                </div>
-                <div>
-                  <h4 className="font-bold text-primary">{testimonial.name}</h4>
-                  <p className="text-gray-500 text-sm">{testimonial.nameArabic}</p>
-                  <p className="text-accent text-xs font-medium">{testimonial.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Render twice for seamless loop without cloning DOM */}
+          {testimonialsConfig.map((t, i) => renderCard(t, "original"))}
+          {testimonialsConfig.map((t, i) => renderCard(t, "clone"))}
         </div>
       </div>
-
-      {/* Gradient Overlays - Desktop Only */}
-      <div className="hidden md:block absolute top-0 left-0 bottom-0 w-32 bg-linear-to-r from-light to-transparent pointer-events-none" />
-      <div className="hidden md:block absolute top-0 right-0 bottom-0 w-32 bg-linear-to-l from-light to-transparent pointer-events-none" />
     </section>
   );
 }
-
