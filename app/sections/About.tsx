@@ -1,27 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { Quote } from "lucide-react";
 import { getOptimizedImagePath, getBlurPlaceholder } from "@/app/lib/image-utils";
-
-gsap.registerPlugin(ScrollTrigger);
-
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import { siteContent } from "@/app/data/siteContent";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   // Helper to parse stats from string "20+" -> number: 20, suffix: "+"
-  const parseStat = (val: string, defaultSuffix: string) => {
+  const parseStat = (val: string) => {
     const match = val.match(/^(\d+(?:\.\d+)?)([A-Za-z+]*)$/);
     if (match) {
       return { number: parseFloat(match[1]), suffix: match[2] };
@@ -29,365 +27,224 @@ export default function About() {
     return { number: 0, suffix: val }; // Fallback
   };
 
-  const branchesStat = parseStat(siteContent.statistics.branches, "+");
-  const customersStat = parseStat(siteContent.statistics.customers, "+");
-  const experienceStat = parseStat(siteContent.statistics.years, "+");
-  const productsStat = parseStat(siteContent.statistics.products, "+");
+  const branchesStat = parseStat(siteContent.statistics.branches);
+  const customersStat = parseStat(siteContent.statistics.customers);
+  const experienceStat = parseStat(siteContent.statistics.years);
+  const productsStat = parseStat(siteContent.statistics.products);
 
   const stats = [
-    { number: branchesStat.number, suffix: branchesStat.suffix, label: t("about.stats.branches") },
-    { number: customersStat.number, suffix: customersStat.suffix, label: t("about.stats.customers") },
-    { number: experienceStat.number, suffix: experienceStat.suffix, label: t("about.stats.experience") },
-    { number: productsStat.number, suffix: productsStat.suffix, label: t("about.stats.products") },
+    { number: branchesStat.number, suffix: branchesStat.suffix, label: t("about.stats.branches"), sub: "Branches" },
+    { number: customersStat.number, suffix: customersStat.suffix, label: t("about.stats.customers"), sub: "Happy Customers" },
+    { number: experienceStat.number, suffix: experienceStat.suffix, label: t("about.stats.experience"), sub: "Years Experience" },
+    { number: productsStat.number, suffix: productsStat.suffix, label: t("about.stats.products"), sub: "Products" },
   ];
 
   useEffect(() => {
-    let cleanup: (() => void) | null = null;
-    let timeoutId: NodeJS.Timeout | null = null;
-    let scrollCleanup: (() => void) | null = null;
+    let ctx: gsap.Context;
 
-    // Wait a bit for refs to be ready
     const initAnimations = () => {
-      if (!sectionRef.current) {
-        timeoutId = setTimeout(initAnimations, 100);
-        return;
-      }
+      if (!sectionRef.current) return;
 
-      const ctx = gsap.context(() => {
-        // Parallax zoom effect on about image
-        // Zoom in when scrolling up, zoom out when scrolling down
-        if (imageRef.current && sectionRef.current && typeof window !== "undefined") {
-          // Set initial scale (zoomed in)
-          gsap.set(imageRef.current, { scale: 1.6 });
-
-          const handleScroll = () => {
-            if (typeof window === "undefined") return;
-
-            const scrollY = window.scrollY;
-            const sectionTop = sectionRef.current?.offsetTop || 0;
-            const sectionHeight = sectionRef.current?.offsetHeight || 0;
-            const windowHeight = window.innerHeight;
-
-            // Calculate when section enters viewport
-            const sectionStart = sectionTop - windowHeight;
-            const sectionEnd = sectionTop + sectionHeight;
-
-            // Calculate scroll progress relative to section
-            // When section is at top of viewport: progress = 0 (zoomed in)
-            // When section is scrolled past: progress = 1 (normal size)
-            let scrollProgress = 0;
-
-            if (scrollY > sectionStart && scrollY < sectionEnd) {
-              // Section is in viewport
-              scrollProgress = (scrollY - sectionStart) / (sectionEnd - sectionStart);
-            } else if (scrollY >= sectionEnd) {
-              // Section is scrolled past
-              scrollProgress = 1;
-            }
-
-            // Zoom out as you scroll down through the section
-            // At top: scale = 1.6 (zoomed in)
-            // At bottom: scale = 1.0 (normal size)
-            const scale = 1.6 - scrollProgress * 0.6;
-
-            // Clamp scale between 1.0 and 1.6
-            const clampedScale = Math.max(1.0, Math.min(1.6, scale));
-
-            // Add will-change when animation is active
-            if (imageRef.current) {
-              if (scrollY > sectionStart && scrollY < sectionEnd) {
-                imageRef.current.style.willChange = "transform";
-              } else {
-                // Remove will-change when animation is complete
-                imageRef.current.style.willChange = "auto";
-              }
-            }
-
-            gsap.to(imageRef.current, {
-              scale: clampedScale,
-              duration: 0.2,
-              ease: "none",
-            });
-          };
-
-          // Use requestAnimationFrame for smooth performance
-          let ticking = false;
-          const scrollHandler = () => {
-            if (!ticking) {
-              window.requestAnimationFrame(() => {
-                handleScroll();
-                ticking = false;
-              });
-              ticking = true;
-            }
-          };
-
-          window.addEventListener("scroll", scrollHandler, { passive: true });
-
-          // Initial call to set correct scale
-          handleScroll();
-
-          // Store cleanup function for scroll handler
-          scrollCleanup = () => {
-            if (typeof window !== "undefined") {
-              window.removeEventListener("scroll", scrollHandler);
-            }
-          };
-        }
-        // Title animation
-        if (titleRef.current) {
-          gsap.fromTo(
-            titleRef.current,
-            {
-              opacity: 0,
-              y: 50,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: titleRef.current,
-                start: "top 80%",
-                end: "top 50%",
-                toggleActions: "play none none none",
-              },
-            }
-          );
-        }
-
-        // Content animation
-        if (contentRef.current) {
-          gsap.fromTo(
-            contentRef.current,
-            {
-              opacity: 0,
-              x: -50,
-            },
+      ctx = gsap.context(() => {
+        // Left Column Animation (Image & Quote)
+        if (leftColRef.current) {
+          gsap.fromTo(leftColRef.current,
+            { opacity: 0, x: -50 },
             {
               opacity: 1,
               x: 0,
               duration: 1,
               ease: "power3.out",
               scrollTrigger: {
-                trigger: contentRef.current,
+                trigger: leftColRef.current,
                 start: "top 80%",
-                end: "top 50%",
-                toggleActions: "play none none none",
-              },
+                toggleActions: "play none none none"
+              }
             }
           );
         }
 
-        // Stats animation with counter
-        if (statsRef.current && typeof window !== "undefined") {
-          const statElements = Array.from(statsRef.current.querySelectorAll(".stat-number"));
+        // Right Column Animation (Text)
+        if (rightColRef.current) {
+          gsap.fromTo(rightColRef.current.children,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: rightColRef.current,
+                start: "top 80%",
+                toggleActions: "play none none none"
+              }
+            }
+          );
+        }
 
+        // Stats Animation
+        if (statsRef.current) {
+          // Fade in cards
+          gsap.fromTo(statsRef.current.children,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: statsRef.current,
+                start: "top 85%",
+                toggleActions: "play none none none"
+              }
+            }
+          );
+
+          // Counter Animation
+          const statElements = Array.from(statsRef.current.querySelectorAll(".stat-number"));
           if (statElements.length > 0) {
-            // Create a single ScrollTrigger that handles all counters
             ScrollTrigger.create({
               trigger: statsRef.current,
-              start: "top 75%",
+              start: "top 85%",
               once: true,
               onEnter: () => {
                 statElements.forEach((element, index) => {
-                  if (!element || index >= stats.length) return;
-                  if (!(element instanceof HTMLElement)) return;
-
+                  if (index >= stats.length) return;
                   const target = stats[index].number;
                   const obj = { value: 0 };
 
-                  // Ensure initial value is 0
-                  element.textContent = "0";
-
-                  // Animate the counter
                   gsap.to(obj, {
                     value: target,
                     duration: 2,
                     ease: "power2.out",
                     onUpdate: () => {
-                      const currentValue = Math.round(obj.value);
-                      element.textContent = currentValue.toLocaleString();
-                    },
+                      if (element) {
+                        // Check if it's an integer
+                        const val = Math.ceil(obj.value);
+                        element.textContent = val.toLocaleString();
+                      }
+                    }
                   });
                 });
-              },
+              }
             });
-
-            // Fade-in animation for stats cards
-            gsap.fromTo(
-              statsRef.current.children,
-              {
-                opacity: 0,
-                y: 30,
-              },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.15,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: statsRef.current,
-                  start: "top 75%",
-                  toggleActions: "play none none none",
-                },
-              }
-            );
-
-            // Fade-in animation for stats cards
-            gsap.fromTo(
-              statsRef.current.children,
-              {
-                opacity: 0,
-                y: 30,
-              },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.15,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: statsRef.current,
-                  start: "top 75%",
-                  toggleActions: "play none none none",
-                },
-              }
-            );
-
-            // Refresh ScrollTrigger to ensure it works
-            ScrollTrigger.refresh();
           }
         }
       }, sectionRef);
-
-      cleanup = () => {
-        if (scrollCleanup) scrollCleanup();
-        ctx.revert();
-      };
     };
 
-    // Start initialization
-    initAnimations();
+    // Small timeout to ensure DOM is ready
+    const timer = setTimeout(initAnimations, 100);
 
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      if (cleanup) cleanup();
+      clearTimeout(timer);
+      if (ctx) ctx.revert();
     };
-  }, [stats]); // Add stats to dependency array
+  }, []);
 
   return (
     <section
-      id="about"
       ref={sectionRef}
-      className="pt-12 md:pt-20 pb-8 md:pb-16 bg-light relative overflow-hidden -mt-20 md:-mt-32 rounded-t-3xl z-10"
+      className="py-16 md:py-24 bg-white relative overflow-hidden rounded-t-[3rem] md:rounded-t-[4rem] -mt-10"
+      id="about"
     >
-      {/* Background Decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <h2
-          ref={titleRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-4 md:mb-8"
-        >
-          {t("about.title")} <span className="text-accent">{t("about.titleHighlight")}</span>
-        </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center mb-8 md:mb-12">
-          <div ref={contentRef}>
-            <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6">
-              {t("about.whoWeAre")}
-            </h3>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
 
-            {/* Desktop: Full text always visible */}
-            <div className="hidden lg:block">
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                {siteContent.about.paragraph1}
-              </p>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                {siteContent.about.paragraph2}
-              </p>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                {siteContent.about.paragraph3}
-              </p>
+          {/* Left Column: Founder Image & Quote */}
+          <div ref={leftColRef} className="relative w-full max-w-[320px] sm:max-w-sm mx-auto">
+            {/* Background Shape */}
+            <div className="absolute top-4 -left-4 w-full h-full bg-accent/5 rounded-[2.5rem] -z-10 transform -rotate-2 scale-105" />
+
+            <div className="relative aspect-4/5 w-full rounded-[2.5rem] overflow-hidden shadow-2xl">
+              {(() => {
+                const blurUrl = getBlurPlaceholder("founder");
+                return (
+                  <Image
+                    src={getOptimizedImagePath("/images/founder.jpg")}
+                    alt="Mr. Askar Neyyan - Founder"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    placeholder={blurUrl ? "blur" : "empty"}
+                    blurDataURL={blurUrl}
+                  />
+                );
+              })()}
+              {/* Founder Name on Image (Optional, based on common designs or just keep it in text) */}
+              <div className="absolute bottom-0 left-0 w-full bg-linear-to-t from-black/80 to-transparent p-8 pt-24 text-white">
+                <p className="font-bold text-xl">Mr. Askar Neyyan</p>
+                <p className="text-white/80 text-sm">Founder & Managing Director</p>
+              </div>
             </div>
 
-            {/* Mobile: Truncated text with read more */}
-            <div className="lg:hidden">
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                {siteContent.about.paragraph1}
+            {/* Floating Quote Card */}
+            <div className="absolute bottom-12 -right-6 md:bottom-20 md:-right-20 bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-xl max-w-[240px] animate-float hidden md:block border border-gray-100/50">
+              <Quote className="text-accent w-6 h-6 mb-2 opacity-90" />
+              <p className="text-gray-700 text-sm font-medium leading-relaxed italic">
+                &quot;We don&apos;t just sell products; we build relationships. Our growth is fueled by trust and quality.&quot;
               </p>
-
-              {isExpanded ? (
-                <>
-                  <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                    {siteContent.about.paragraph2}
-                  </p>
-                  <p className="text-gray-600 text-lg leading-relaxed mb-4">
-                    {siteContent.about.paragraph3}
-                  </p>
-                  <button
-                    onClick={() => setIsExpanded(false)}
-                    className="text-accent font-semibold hover:text-accent/80 transition-colors"
-                  >
-                    {t("about.readLess")}
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => setIsExpanded(true)}
-                  className="text-accent font-semibold hover:text-accent/80 transition-colors"
-                >
-                  {t("about.readMore")}
-                </button>
-              )}
             </div>
           </div>
 
-          <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
-            <div
-              ref={imageRef}
-              className="absolute inset-0"
-              style={{
-                transformOrigin: "center center"
-              }}
-            >
-              <Image
-                src={getOptimizedImagePath("/images/about_image.png")}
-                alt="About Thahama Market"
-                fill
-                className="object-cover rounded-2xl"
-                loading="lazy"
-                placeholder="blur"
-                blurDataURL={getBlurPlaceholder("about_image")}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+          {/* Right Column: Narrative */}
+          <div ref={rightColRef} className="flex flex-col space-y-6">
+            <div>
+              <span className="text-accent font-semibold tracking-wide uppercase text-sm mb-2 block">Our Story</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-primary leading-tight">
+                Deep Roots, <br /><span className="text-accent">Diverse Horizons</span>
+              </h2>
+              <p className="text-gray-500 font-medium mt-2 text-lg">Serving the Kingdom Since 2005</p>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-primary">Who We Are</h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE, dedicated to providing the highest quality products and exceptional customer service.
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                Our commitment to freshness, quality, and community has made us a trusted name across the region. From fresh produce to household essentials, we ensure every product meets our rigorous standards.
+              </p>
+            </div>
+
+            <div className="pt-4">
+              <div className="inline-flex items-center space-x-2 bg-gray-50 px-6 py-3 rounded-full border border-gray-100">
+                <span className="font-bold text-primary">Serving</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <span className="font-medium text-gray-600">JEDDAH</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <span className="font-medium text-gray-600">MECCA</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <span className="font-medium text-gray-600">MADINAH</span>
+              </div>
             </div>
           </div>
+
         </div>
 
-        {/* Stats Grid */}
-        <div
-          ref={statsRef}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
-        >
+        {/* Stats Section */}
+        <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="text-center p-4 md:p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className="bg-white p-6 md:p-8 rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] transition-all duration-300 text-center border border-gray-50"
             >
-              <div className="text-2xl md:text-5xl font-bold text-accent mb-2">
+              <div className="flex items-center justify-center text-3xl md:text-5xl font-bold text-accent mb-2">
                 <span className="stat-number">0</span>
                 <span>{stat.suffix}</span>
               </div>
-              <div className="text-sm md:text-base text-gray-600 font-medium">{stat.label}</div>
+              <p className="text-gray-600 font-medium text-sm md:text-base">{stat.sub}</p>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
 }
+
 
