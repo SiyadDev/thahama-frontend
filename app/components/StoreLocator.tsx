@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { gsap } from "gsap";
-import { FiSearch, FiMapPin, FiNavigation, FiPhone, FiClock, FiX, FiFilter } from "react-icons/fi";
+import { FiSearch, FiMapPin, FiNavigation, FiPhone, FiClock, FiX, FiFilter, FiArrowLeft, FiArrowRight, FiMap } from "react-icons/fi";
 import { useLanguage } from "../i18n/LanguageContext";
 
 import { siteContent } from "@/app/data/siteContent";
@@ -192,7 +193,7 @@ const DynamicLeafletMap = dynamic(() => Promise.resolve(LeafletMap), {
 
 // --- Main Store Locator Component ---
 export default function StoreLocator() {
-    const { t } = useLanguage();
+    const { t, dir } = useLanguage();
     const [selectedCity, setSelectedCity] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedStore, setSelectedStore] = useState<string | null>(null);
@@ -231,6 +232,20 @@ export default function StoreLocator() {
     return (
         <div className="flex-1 w-full h-full relative overflow-hidden flex flex-col md:flex-row">
 
+            {/* Back Button */}
+            <Link
+                href="/"
+                className="absolute top-4 left-4 z-40 bg-white/90 backdrop-blur-md shadow-md hover:shadow-lg text-primary px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300 hover:scale-105 group font-medium text-sm"
+            >
+                {dir === 'rtl' ? (
+                    <FiArrowRight className="text-lg group-hover:translate-x-1 transition-transform" />
+                ) : (
+                    <FiArrowLeft className="text-lg group-hover:-translate-x-1 transition-transform" />
+                )}
+                <span className="hidden md:inline">{t('navbar.backToHome')}</span>
+                <span className="md:hidden">{t('navbar.home')}</span>
+            </Link>
+
             {/* Sidebar / Floating Panel */}
             <div className={`
         absolute md:relative z-20 bg-white/95 backdrop-blur-xl shadow-2xl 
@@ -250,7 +265,7 @@ export default function StoreLocator() {
                 </div>
 
                 {/* Header Section */}
-                <div className="p-6 pb-4 border-b border-gray-100 bg-white/50 space-y-4">
+                <div className="p-6 md:pt-16 pb-4 border-b border-gray-100 bg-white/50 space-y-4">
                     <div>
                         <h1 className="text-2xl font-bold text-primary mb-1">Our Locations</h1>
                         <p className="text-sm text-gray-500">{filteredStores.length} stores found</p>
@@ -361,17 +376,31 @@ export default function StoreLocator() {
                         }
                     }}
                 />
-
-                {/* Floating Action Button (Mobile) - View List */}
-                {!isMobileListOpen && (
-                    <button
-                        onClick={() => setIsMobileListOpen(true)}
-                        className="md:hidden absolute bottom-6 left-1/2 -translate-x-1/2 bg-primary text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2 z-50 animate-in fade-in zoom-in duration-300"
-                    >
-                        <FiFilter /> View List
-                    </button>
-                )}
             </div>
+
+            {/* Floating Action Button (Mobile) - View List / Show Map */}
+            <button
+                onClick={() => setIsMobileListOpen(!isMobileListOpen)}
+                className={`
+                    md:hidden absolute bottom-6 left-1/2 -translate-x-1/2 
+                    px-6 py-3 rounded-full shadow-xl flex items-center gap-2 z-50 
+                    transition-all duration-300 hover:scale-105 active:scale-95
+                    ${isMobileListOpen
+                        ? "bg-white text-primary border border-gray-200"
+                        : "bg-primary text-white border-transparent"
+                    }
+                `}
+            >
+                {isMobileListOpen ? (
+                    <>
+                        <FiMap /> Show Map
+                    </>
+                ) : (
+                    <>
+                        <FiFilter /> View List
+                    </>
+                )}
+            </button>
 
         </div>
     );
