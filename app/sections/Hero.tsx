@@ -179,7 +179,7 @@ export default function Hero() {
       )}
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full -translate-y-16 md:-translate-y-20">
         <h1
           ref={titleRef}
           className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-bold mb-6 perspective-1000 break-words whitespace-normal leading-tight"
@@ -199,7 +199,7 @@ export default function Hero() {
       {/* Scroll Indicator */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-40 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute bottom-48 md:bottom-56 left-1/2 transform -translate-x-1/2 z-20"
       >
         <ScrollIndicator
           onClick={() => {

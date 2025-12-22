@@ -20,6 +20,7 @@ export default function Services() {
           trigger: cardsRef.current,
           stagger: 0.1,
           y: 30,
+          start: "top bottom",
         });
       }
     }, cardsRef.current);
@@ -30,8 +31,9 @@ export default function Services() {
   return (
     <SectionWrapper
       id="services"
-      className="bg-white z-10"
+      className="bg-white z-10 !pt-12 md:!pt-16 rounded-t-[3rem] md:rounded-t-[3rem] -mt-5"
       aria-label={t("services.title")}
+      animationStart="top bottom"
     >
       {/* Background Decoration */}
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />

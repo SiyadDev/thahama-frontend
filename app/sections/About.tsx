@@ -113,7 +113,7 @@ export default function About() {
   return (
     <SectionWrapper
       id="about"
-      className="bg-white rounded-t-[3rem] md:rounded-t-[4rem] -mt-10 z-20"
+      className="bg-white z-20"
       aria-label={t("about.title")}
     >
       <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center text-primary mb-8 md:mb-12">

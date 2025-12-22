@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useMemo, useSyncExternalStore, ReactNode } from "react";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 
 interface DeviceState {
@@ -21,33 +21,34 @@ const initialState: DeviceState = {
 
 const DeviceContext = createContext<DeviceState>(initialState);
 
+const emptySubscribe = () => () => { };
+
 export const DeviceProvider = ({ children }: { children: ReactNode }) => {
   const isMobileQuery = useMediaQuery("(max-width: 767px)");
   const isTabletQuery = useMediaQuery("(min-width: 768px) and (max-width: 1024px)");
   const isDesktopQuery = useMediaQuery("(min-width: 1025px)");
   const isPortraitQuery = useMediaQuery("(orientation: portrait)");
   
-  const [deviceState, setDeviceState] = useState<DeviceState>(initialState);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
+  const deviceState = useMemo(() => {
+    if (!mounted) return initialState;
 
     const isTouch = 
       typeof window !== "undefined" && 
       ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
-    setDeviceState({
+    return {
       isMobile: isMobileQuery,
       isTablet: isTabletQuery,
       isDesktop: isDesktopQuery,
       isTouch,
-      orientation: isPortraitQuery ? "portrait" : "landscape",
-    });
+      orientation: (isPortraitQuery ? "portrait" : "landscape") as "portrait" | "landscape",
+    };
   }, [isMobileQuery, isTabletQuery, isDesktopQuery, isPortraitQuery, mounted]);
 
   return (
@@ -58,4 +59,3 @@ export const DeviceProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useDeviceContext = () => useContext(DeviceContext);
-

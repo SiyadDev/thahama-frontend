@@ -48,12 +48,19 @@ export function createFadeInAnimation(
     duration?: number;
     delay?: number;
     ease?: string;
+    start?: string;
   }
 ) {
   if (!element) return null;
-  
-  const { y = 50, duration = 1, delay = 0, ease = gsapConfig.ease.smooth } = options || {};
-  
+
+  const {
+    y = 50,
+    duration = 1,
+    delay = 0,
+    ease = gsapConfig.ease.smooth,
+    start = gsapConfig.scrollTrigger.start,
+  } = options || {};
+
   return gsap.fromTo(
     element,
     {
@@ -68,7 +75,7 @@ export function createFadeInAnimation(
       ease,
       scrollTrigger: {
         trigger: element,
-        start: gsapConfig.scrollTrigger.start,
+        start: start,
         toggleActions: gsapConfig.scrollTrigger.toggleActions,
       },
     }
@@ -86,18 +93,20 @@ export function createStaggerAnimation(
     stagger?: number;
     ease?: string;
     trigger?: HTMLElement | null; // Optional trigger for scroll animation
+    start?: string;
   }
 ) {
   if (!elements || elements.length === 0) return null;
-  
-  const { 
-    y = 40, 
-    duration = 0.8, 
-    stagger = 0.1, 
+
+  const {
+    y = 40,
+    duration = 0.8,
+    stagger = 0.1,
     ease = gsapConfig.ease.quick,
-    trigger = null 
+    trigger = null,
+    start = gsapConfig.scrollTrigger.start,
   } = options || {};
-  
+
   const vars: gsap.TweenVars = {
     opacity: 1,
     y: 0,
@@ -110,11 +119,11 @@ export function createStaggerAnimation(
   if (trigger) {
     vars.scrollTrigger = {
       trigger: trigger,
-      start: gsapConfig.scrollTrigger.start,
+      start: start,
       toggleActions: gsapConfig.scrollTrigger.toggleActions,
     };
   }
-  
+
   return gsap.fromTo(
     elements,
     {

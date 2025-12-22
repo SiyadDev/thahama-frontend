@@ -68,13 +68,8 @@ export default function Home() {
           <Hero />
         </Suspense>
         
-        {/* Spacer to push content below fixed hero section */}
-        <div className="h-screen relative z-10" />
-        
-        {/* About Section - Company info with animated stats */}
-        <Suspense fallback={<SkeletonLoader variant="section" className="bg-light" />}>
-          <About />
-        </Suspense>
+        {/* Spacer to push content below fixed hero section - reduced height to show next section peak */}
+        <div className="h-[80vh] relative z-10" />
         
         {/* Services Section - Service cards with animations */}
         <Suspense fallback={<SkeletonLoader variant="section" className="bg-white" />}>
@@ -85,17 +80,22 @@ export default function Home() {
         <Suspense fallback={<SkeletonLoader variant="section" className="bg-light" />}>
           <Branches />
         </Suspense>
+
+        {/* Testimonials Section - Auto-scrolling carousel */}
+        <Suspense fallback={<SkeletonLoader variant="section" className="bg-light" />}>
+          <Testimonials />
+        </Suspense>
+
+        {/* About Section - Company info with animated stats */}
+        <Suspense fallback={<SkeletonLoader variant="section" className="bg-light" />}>
+          <About />
+        </Suspense>
         
         {/* Gallery Section - Image gallery with lightbox */}
         <Suspense fallback={<SkeletonLoader variant="section" className="bg-dark" />}>
           <Gallery />
         </Suspense>
-        
-        {/* Testimonials Section - Auto-scrolling carousel */}
-        <Suspense fallback={<SkeletonLoader variant="section" className="bg-light" />}>
-          <Testimonials />
-        </Suspense>
-        
+
         {/* FAQ Section - Accordion with smooth animations */}
         <Suspense fallback={<SkeletonLoader variant="section" className="bg-white" />}>
           <FAQ />

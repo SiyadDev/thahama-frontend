@@ -13,6 +13,7 @@ interface SectionWrapperProps {
   disableAnimation?: boolean;
   role?: string;
   "aria-label"?: string;
+  animationStart?: string;
 }
 
 gsap.registerPlugin(ScrollTrigger);
@@ -33,6 +34,7 @@ export default function SectionWrapper({
   disableAnimation = false,
   role = "region",
   "aria-label": ariaLabel,
+  animationStart,
 }: SectionWrapperProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -51,12 +53,13 @@ export default function SectionWrapper({
           y: 30,
           duration: 0.8,
           ease: "power2.out",
+          start: animationStart,
         });
       }
     }, sectionRef.current);
 
     return cleanup;
-  }, [disableAnimation, isMobile]);
+  }, [disableAnimation, isMobile, animationStart]);
 
   return (
     <section

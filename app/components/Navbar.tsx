@@ -32,9 +32,9 @@ import { useDevice } from "@/app/hooks/useDevice";
 // Static data - could be moved to a config file if needed
 const navLinks = [
   { name: "home", href: "#home" },
-  { name: "about", href: "#about" },
   { name: "services", href: "#services" },
   { name: "branches", href: "#branches" },
+  { name: "about", href: "#about" },
   { name: "gallery", href: "#gallery" },
   { name: "contact", href: "#contact" },
 ];
@@ -59,7 +59,9 @@ export default function Navbar() {
    */
   useEffect(() => {
     if (isDesktop && isOpen) {
-      setIsOpen(false);
+      // Use setTimeout to avoid synchronous state update warning
+      const timer = setTimeout(() => setIsOpen(false), 0);
+      return () => clearTimeout(timer);
     }
   }, [isDesktop, isOpen]);
 
@@ -127,8 +129,12 @@ export default function Navbar() {
       const currentScrollY = window.scrollY;
       const heroSectionHeight = window.innerHeight;
 
-      // Check if within hero section (full viewport height)
-      const isInHeroSection = currentScrollY < heroSectionHeight;
+      // Trigger transition earlier - when user scrolls 60% of hero height
+      // This ensures transition happens before the hero section fully exits view
+      const transitionPoint = heroSectionHeight * 0.6;
+
+      // Check if within hero section (using adjusted transition point)
+      const isInHeroSection = currentScrollY < transitionPoint;
       setIsAtTop(isInHeroSection);
 
       // Show navbar when at top or scrolling up, hide when scrolling down
