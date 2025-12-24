@@ -119,3 +119,67 @@ section#home {
   scrollbar-width: none !important;
   /* Firefox */
 }
+
+/* --- Ramadan Mode Theme Overrides --- */
+body.ramadan-mode {
+  --background: #0f172a;
+  /* Slate 900 */
+  --foreground: #f8fafc;
+  /* Slate 50 */
+  --primary: #f8fafc;
+  /* Override root primary for text */
+  --accent: #fbbf24;
+  /* Amber 400 (Gold) */
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+body.ramadan-mode .bg-white {
+  background-color: #1e293b !important;
+  /* Slate 800 */
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.ramadan-mode .bg-slate-50,
+body.ramadan-mode .bg-light {
+  background-color: #0f172a !important;
+}
+
+body.ramadan-mode .text-slate-900,
+body.ramadan-mode .text-primary {
+  color: #f8fafc !important;
+}
+
+body.ramadan-mode .text-slate-500,
+body.ramadan-mode .text-gray-600 {
+  color: #94a3b8 !important;
+  /* Slate 400 */
+}
+
+body.ramadan-mode h1,
+body.ramadan-mode h2,
+body.ramadan-mode h3,
+body.ramadan-mode h4,
+body.ramadan-mode strong {
+  color: #fbbf24 !important;
+  /* Amber 400 (Gold) */
+}
+
+body.ramadan-mode .text-accent {
+  color: #fbbf24 !important;
+}
+
+body.ramadan-mode .bg-accent {
+  background-color: #fbbf24 !important;
+}
+
+body.ramadan-mode .border-white\/40 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Specific Card Overrides for Ramadan Mode */
+body.ramadan-mode .service-card-wrapper .bg-white {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 4px 20px -5px rgba(251, 191, 36, 0.2) !important;
+}
