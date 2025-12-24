@@ -289,33 +289,33 @@ export const siteContent = {
     {
       id: "hours",
       question: "What are your store opening hours?",
-      answer: "24 Hours",
+      answer: "We are open 24 hours a day, 7 days a week across most of our major branches to serve you whenever you need us. Please check the specific branch details for any exceptions.",
     },
     {
       id: "delivery",
       question: "Do you offer home delivery?",
-      answer: "Yes",
+      answer: "Yes, we offer fast and reliable home delivery services to bring fresh groceries right to your doorstep. You can place your order through our delivery partners or reach out to us directly via WhatsApp.",
     },
     {
       id: "loyalty",
       question: "Is there a loyalty rewards program?",
-      answer: "Yes",
+      answer: "Absolutely! We value our regular customers. Our loyalty program rewards you with points for every purchase, which can be redeemed for exclusive discounts and special offers in-store.",
     },
     {
       id: "freshness",
       question: "How do you ensure product freshness?",
       answer:
-        "Preserving them at correct temparatures and Storing them in clean places",
+        "Quality is our top priority. We strictly adhere to international food safety standards, utilizing advanced temperature-controlled storage and daily restocking to ensure every product on our shelves is fresh and safe.",
     },
     {
       id: "payment",
       question: "Do you accept online payments?",
-      answer: "Pos", // As per sheet
+      answer: "We accept all major payment methods including Cash, Credit/Debit Cards, Mada, and Apple Pay, ensuring a seamless and secure checkout experience for everyone.",
     },
     {
       id: "returns",
       question: "Can I return or exchange products?",
-      answer: "Yes",
+      answer: "Yes, we have a customer-friendly return policy. If you are not completely satisfied with a product, you can return or exchange it within 24 hours of purchase, provided you have the original receipt and the item is in its original condition.",
     },
   ],
   socialLinks: {
