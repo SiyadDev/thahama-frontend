@@ -5,6 +5,7 @@ import { siteContent } from "@/app/data/siteContent";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import SectionWrapper from "@/app/components/ui/SectionWrapper";
 import { createGSAPContext, createStaggerAnimation } from "@/app/lib/gsap-utils";
+import { useDevice } from "@/app/hooks/useDevice";
 import { FiCheck, FiClock, FiMapPin, FiArrowRight, FiInfo } from "react-icons/fi";
 
 // --- Types & Helpers ---
@@ -64,15 +65,16 @@ const SpotlightCard = ({
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
+  const { isMobile } = useDevice();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current) return;
+    if (isMobile || !divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
-  const handleMouseEnter = () => setOpacity(1);
-  const handleMouseLeave = () => setOpacity(0);
+  const handleMouseEnter = () => !isMobile && setOpacity(1);
+  const handleMouseLeave = () => !isMobile && setOpacity(0);
 
   return (
     <div
@@ -80,15 +82,17 @@ const SpotlightCard = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-white/60 shadow-lg transition-all duration-500 ease-out hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/10 ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-white border border-white/60 shadow-lg transition-all duration-500 ease-out hover:border-accent/40 md:hover:shadow-2xl md:hover:shadow-accent/10 ${isMobile ? '' : 'backdrop-blur-md'} ${className}`}
     >
-      <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition duration-500"
-        style={{
-          opacity,
-          background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,
-        }}
-      />
+      {!isMobile && (
+        <div
+          className="pointer-events-none absolute -inset-px opacity-0 transition duration-500"
+          style={{
+            opacity,
+            background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,
+          }}
+        />
+      )}
       <div className="relative h-full">{children}</div>
     </div>
   );
@@ -192,8 +196,8 @@ export default function Services() {
 
                     {/* Top Row: Icon and Status */}
                     <div className="flex justify-between items-start mb-4 md:mb-8">
-                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-primary group-hover:bg-accent group-hover:text-white group-hover:scale-110 transition-all duration-500 ease-out shadow-sm group-hover:shadow-accent/30">
-                        <Icon className="text-lg md:text-2xl transition-transform duration-500 group-hover:rotate-[-5deg]" />
+                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-primary md:group-hover:bg-accent md:group-hover:text-white md:group-hover:scale-110 transition-all duration-500 ease-out shadow-sm md:group-hover:shadow-accent/30">
+                        <Icon className="text-lg md:text-2xl transition-transform duration-500 md:group-hover:rotate-[-5deg]" />
                       </div>
 
                       <div className={`flex items-center gap-1.5 px-2.5 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-[11px] font-bold tracking-wide uppercase ${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border`}>
@@ -204,7 +208,7 @@ export default function Services() {
 
                     {/* Content */}
                     <div className="flex-1">
-                      <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-accent transition-colors duration-300">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 md:mb-3 md:group-hover:text-accent transition-colors duration-300">
                         {service.title}
                       </h3>
 
@@ -218,9 +222,9 @@ export default function Services() {
                     </div>
 
                     {/* Bottom Action */}
-                    <div className="mt-auto pt-4 md:pt-6 border-t border-slate-50 flex items-center text-sm font-semibold text-slate-400 group-hover:text-primary transition-colors duration-300 cursor-pointer">
+                    <div className="mt-auto pt-4 md:pt-6 border-t border-slate-50 flex items-center text-sm font-semibold text-slate-400 md:group-hover:text-primary transition-colors duration-300 cursor-pointer">
                       <span className="mr-2">Explore Service</span>
-                      <FiArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300 text-accent" />
+                      <FiArrowRight className="w-4 h-4 transform md:group-hover:translate-x-1 transition-transform duration-300 text-accent" />
                     </div>
                   </div>
                 </SpotlightCard>
