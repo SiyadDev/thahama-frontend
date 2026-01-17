@@ -119,3 +119,13 @@ section#home {
   scrollbar-width: none !important;
   /* Firefox */
 }
+
+/* Texture Background Utility */
+.bg-texture {
+  background-image: url("/images/bg-texture.jpg");
+  background-color: #ffffff;
+  background-size: auto;
+  background-position: center;
+  background-repeat: repeat;
+  background-attachment: scroll;
+}

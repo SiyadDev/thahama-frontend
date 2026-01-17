@@ -41,7 +41,7 @@ export default function Contact() {
   return (
     <SectionWrapper
       id="contact"
-      className="bg-light z-10"
+      className="bg-texture z-10"
       aria-label={t("contact.title")}
     >
       {/* Background Decoration */}

@@ -123,35 +123,10 @@ export default function Services() {
   return (
     <SectionWrapper
       id="services"
-      className="relative z-30 pt-20! md:pt-32! pb-20! md:pb-24! -mt-0 md:-mt-4 rounded-t-[2.5rem] md:rounded-t-[5rem] overflow-hidden shadow-[0_-25px_50px_-12px_rgba(0,0,0,0.15)] border-t border-white/40 bg-slate-50"
+      className="relative z-30 pt-20! md:pt-32! pb-20! md:pb-24! -mt-0 md:-mt-4 rounded-t-[2.5rem] md:rounded-t-[5rem] overflow-hidden shadow-[0_-25px_50px_-12px_rgba(0,0,0,0.15)] border-t border-white/40 bg-texture"
       aria-label={`${t("services.title")} ${t("services.titleHighlight")}`}
       disableAnimation={true}
     >
-      {/* Animated Gradient Background - Optimized with transform for performance */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div
-          className="absolute -inset-[100%] w-[300%] h-[300%] animate-gradient-flow will-change-transform"
-          style={{
-            background: 'linear-gradient(-45deg, #eff6ff, #fff7ed, #f0fdf4, #f8fafc)',
-            backgroundSize: '100% 100%',
-          }}
-        />
-      </div>
-      <style jsx>{`
-        @keyframes gradient-flow {
-          0% { transform: translate3d(0, 0, 0); }
-          50% { transform: translate3d(-15%, -15%, 0); }
-          100% { transform: translate3d(0, 0, 0); }
-        }
-        .animate-gradient-flow {
-          /* Fallback: no animation if reduced motion is preferred */
-        }
-        @media (prefers-reduced-motion: no-preference) {
-          .animate-gradient-flow {
-            animation: gradient-flow 15s ease infinite;
-          }
-        }
-      `}</style>
 
       <div className="container mx-auto" ref={containerRef}>
 
