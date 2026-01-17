@@ -8,6 +8,7 @@ import ScrollIndicator from "@/app/components/ScrollIndicator";
 import { siteContent } from "@/app/data/siteContent";
 import { useDevice } from "@/app/hooks/useDevice";
 import { createGSAPContext } from "@/app/lib/gsap-utils";
+import { useLoading } from "@/app/context/LoadingContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,10 +19,23 @@ export default function Hero() {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const infoCardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const { setIsLoading } = useLoading();
   const { isMobile, isTablet } = useDevice();
 
   useEffect(() => {
+    // Fallback: Ensure loading state is turned off after max 4 seconds
+    // to prevent getting stuck if image fails or takes too long
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [setIsLoading]);
+
+  useEffect(() => {
     let scrollCleanup: (() => void) | null = null;
+
+    // ... existing GSAP cleanup ...
 
     const cleanupGSAP = createGSAPContext(() => {
       // 1. Parallax zoom effect on background image
@@ -170,6 +184,8 @@ export default function Hero() {
             unoptimized
             placeholder="empty"
             sizes="100vw"
+            onLoad={() => setIsLoading(false)}
+            onLoadingComplete={() => setIsLoading(false)}
           />
           {/* Enhanced Gradient Overlay for Text Readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />

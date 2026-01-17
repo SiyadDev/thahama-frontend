@@ -7,6 +7,8 @@ import { LanguageProvider } from "./i18n/LanguageContext";
 import { DeviceProvider } from "./context/DeviceContext";
 import SmartChatWidget from "./components/SmartChatWidget";
 import { cookieName, fallbackLng } from "./i18n/settings";
+import { LoadingProvider } from "./context/LoadingContext";
+import SplashScreen from "./components/SplashScreen";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -117,39 +119,42 @@ export default async function RootLayout({
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
         <DeviceProvider>
           <LanguageProvider initialLanguage={lang}>
-            {/* Structured Data (JSON-LD) for SEO */}
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "Store",
-                  name: "THAHAMA:market",
-                  description: "Fastest-growing supermarket in Saudi Arabia & UAE. Quality products, fresh produce, and exceptional service.",
-                  url: process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com",
-                  logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/logos/thahama.svg`,
-                  image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.webp`,
-                  address: {
-                    "@type": "PostalAddress",
-                    addressCountry: "SA",
-                    addressLocality: "Jeddah",
-                  },
-                  priceRange: "$$",
-                  servesCuisine: "Grocery",
-                  openingHoursSpecification: [
-                    {
-                      "@type": "OpeningHoursSpecification",
-                      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-                      opens: "08:00",
-                      closes: "23:00",
+            <LoadingProvider>
+              {/* Structured Data (JSON-LD) for SEO */}
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Store",
+                    name: "THAHAMA:market",
+                    description: "Fastest-growing supermarket in Saudi Arabia & UAE. Quality products, fresh produce, and exceptional service.",
+                    url: process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com",
+                    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/logos/thahama.svg`,
+                    image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://thahama-market.com"}/images/ChatGPT Image Nov 29, 2025, 04_01_26 PM.webp`,
+                    address: {
+                      "@type": "PostalAddress",
+                      addressCountry: "SA",
+                      addressLocality: "Jeddah",
                     },
-                  ],
-                }),
-              }}
-            />
-            {children}
-            <SmartChatWidget />
-            <ServiceWorkerRegistration />
+                    priceRange: "$$",
+                    servesCuisine: "Grocery",
+                    openingHoursSpecification: [
+                      {
+                        "@type": "OpeningHoursSpecification",
+                        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                        opens: "08:00",
+                        closes: "23:00",
+                      },
+                    ],
+                  }),
+                }}
+              />
+              <SplashScreen />
+              {children}
+              <SmartChatWidget />
+              <ServiceWorkerRegistration />
+            </LoadingProvider>
           </LanguageProvider>
         </DeviceProvider>
       </body>
