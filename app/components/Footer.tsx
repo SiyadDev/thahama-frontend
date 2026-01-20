@@ -13,12 +13,13 @@ import { useState } from "react";
 import { FiPhone, FiMail, FiMapPin, FiFacebook, FiInstagram, FiTwitter, FiCheck } from "react-icons/fi";
 import { useLanguage } from "../i18n/LanguageContext";
 import { siteContent } from "@/app/data/siteContent";
+import { getLocalizedContent } from "@/app/lib/i18n-utils";
 
 export default function Footer() {
   // Get current year for copyright
   const currentYear = new Date().getFullYear();
   const [copiedPhone, setCopiedPhone] = useState(false);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const copyToClipboard = async (phone: string) => {
     try {
@@ -44,7 +45,7 @@ export default function Footer() {
               {t("footer.description")}
             </p>
             <p className="text-gray-400 text-sm">
-              {siteContent.hero.tagline}
+              {getLocalizedContent(siteContent.hero.tagline, language)}
             </p>
           </div>
 
@@ -98,7 +99,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2 text-gray-300">
                 <FiMapPin className="text-accent mt-1" />
-                <span>{siteContent.hero.address}</span>
+                <span>{getLocalizedContent(siteContent.hero.address, language)}</span>
               </li>
             </ul>
           </div>
@@ -107,7 +108,7 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-accent">{t("footer.openingHours")}</h4>
             <p className="text-gray-300 mb-6">
-              {siteContent.hero.businessHours}
+              {getLocalizedContent(siteContent.hero.businessHours, language)}
             </p>
             <div className="flex gap-4">
               {siteContent.socialLinks.facebook && (

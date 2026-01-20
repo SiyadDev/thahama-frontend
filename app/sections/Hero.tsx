@@ -9,6 +9,8 @@ import { siteContent } from "@/app/data/siteContent";
 import { useDevice } from "@/app/hooks/useDevice";
 import { createGSAPContext } from "@/app/lib/gsap-utils";
 import { useLoading } from "@/app/context/LoadingContext";
+import { useLanguage } from "@/app/i18n/LanguageContext";
+import { getLocalizedContent } from "@/app/lib/i18n-utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,6 +23,7 @@ export default function Hero() {
   const imageRef = useRef<HTMLDivElement>(null);
   const { setIsLoading } = useLoading();
   const { isMobile, isTablet } = useDevice();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     // Fallback: Ensure loading state is turned off after max 4 seconds
@@ -201,10 +204,10 @@ export default function Hero() {
           <div className="max-w-4xl pointer-events-auto transform -translate-y-12 md:translate-y-0">
             <h1 ref={titleRef} className="flex flex-col font-bold leading-[0.85] tracking-tighter text-white">
               <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[11rem]">
-                THAHAMA
+                {t("hero.brandName")}
               </span>
               <span className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-accent font-light ml-2 md:ml-4">
-                :market
+                {t("hero.brandSuffix")}
               </span>
             </h1>
 
@@ -213,7 +216,7 @@ export default function Hero() {
                 ref={subtitleRef}
                 className="text-lg md:text-xl text-gray-200/90 font-medium tracking-wide max-w-sm border-l-2 border-accent pl-4"
               >
-                {siteContent.hero.tagline}
+                {getLocalizedContent(siteContent.hero.tagline, language)}
               </p>
             </div>
           </div>
@@ -229,16 +232,16 @@ export default function Hero() {
           >
             <div className="flex items-center gap-4 md:gap-6 p-4 md:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl shadow-black/10 hover:bg-white/20 transition-colors duration-300">
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] md:text-xs text-gray-300 uppercase tracking-widest">Opening Hours</span>
-                <span className="text-base md:text-xl text-white font-bold">24 Hours / 7 Days</span>
+                <span className="text-[10px] md:text-xs text-gray-300 uppercase tracking-widest">{t("hero.openingHours")}</span>
+                <span className="text-base md:text-xl text-white font-bold">{t("hero.hours247")}</span>
               </div>
 
               {/* Divider - Hidden on very small screens if needed, but kept for design */}
               <div className="w-px h-8 md:h-10 bg-white/20" />
 
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] md:text-xs text-gray-300 uppercase tracking-widest">Quality</span>
-                <span className="text-base md:text-xl text-white font-bold">Premium Fresh</span>
+                <span className="text-[10px] md:text-xs text-gray-300 uppercase tracking-widest">{t("hero.quality")}</span>
+                <span className="text-base md:text-xl text-white font-bold">{t("hero.premiumFresh")}</span>
               </div>
             </div>
           </div>

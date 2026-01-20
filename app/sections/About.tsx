@@ -14,7 +14,7 @@ import { useDevice } from "@/app/hooks/useDevice";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { isMobile } = useDevice();
 
   // We only keep refs for internal staggered animations not handled by wrapper
@@ -146,8 +146,8 @@ export default function About() {
 
             {/* Founder Name on Image */}
             <div className="absolute bottom-0 left-0 w-full bg-linear-to-t from-black/80 to-transparent p-8 pt-24 text-white">
-              <p className="font-bold text-xl">Mr. Askar Neyyan</p>
-              <p className="text-white/80 text-sm">Founder & Managing Director</p>
+              <p className="font-bold text-xl">{language === 'ar' ? 'السيد أسكر نيان' : 'Mr. Askar Neyyan'}</p>
+              <p className="text-white/80 text-sm">{language === 'ar' ? 'المؤسس والمدير التنفيذي' : 'Founder & Managing Director'}</p>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export default function About() {
             <div className="hidden md:block absolute bottom-12 -right-6 md:bottom-20 md:-right-20 bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-xl max-w-[240px] animate-float border border-gray-100/50 z-20">
               <Quote className="text-accent w-6 h-6 mb-2 opacity-90" />
               <p className="text-gray-700 text-sm font-medium leading-relaxed italic">
-                &quot;We don&apos;t just sell products; we build relationships. Our growth is fueled by trust and quality.&quot;
+                {language === 'ar' ? '"نحن لا نبيع المنتجات فقط؛ نبني العلاقات. نمونا مدفوع بالثقة والجودة."' : '"We don\'t just sell products; we build relationships. Our growth is fueled by trust and quality."'}
               </p>
             </div>
           )}
@@ -165,15 +165,15 @@ export default function About() {
         {/* Right Column: Narrative & Stats */}
         <div ref={rightColRef} className="flex flex-col space-y-6 md:space-y-8 lg:pt-8">
           <div>
-            <span className="text-accent font-bold text-lg md:text-xl mb-2 md:mb-3 block">Our Story</span>
+            <span className="text-accent font-bold text-lg md:text-xl mb-2 md:mb-3 block">{t("about.ourStory")}</span>
             <h3 className="text-3xl md:text-4xl font-bold text-primary leading-tight">
-              Who We Are
+              {t("about.whoWeAre")}
             </h3>
           </div>
 
           <div className="space-y-4 text-gray-600 text-base md:text-lg leading-relaxed relative">
             <p>
-              THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE, dedicated to providing the highest quality products and exceptional customer service.
+              {language === 'ar' ? siteContent.about.paragraph1.ar : siteContent.about.paragraph1.en}
             </p>
 
             {/* Mobile Quote Card - Embedded in text */}
@@ -181,7 +181,7 @@ export default function About() {
               <div className="md:hidden mt-6 bg-accent/5 p-5 rounded-2xl border-l-4 border-accent relative overflow-hidden">
                 <Quote className="text-accent w-5 h-5 mb-2 opacity-90" />
                 <p className="text-gray-700 text-sm font-medium leading-relaxed italic relative z-10">
-                  &quot;We don&apos;t just sell products; we build relationships. Our growth is fueled by trust and quality.&quot;
+                  {language === 'ar' ? '"نحن لا نبيع المنتجات فقط؛ نبني العلاقات. نمونا مدفوع بالثقة والجودة."' : '"We don\'t just sell products; we build relationships. Our growth is fueled by trust and quality."'}
                 </p>
                 <div className="absolute -right-4 -bottom-4 text-accent/10">
                   <Quote className="w-24 h-24 transform rotate-180" />
@@ -193,13 +193,13 @@ export default function About() {
           {/* Serving Locations */}
           <div className="pt-2 w-full overflow-x-auto no-scrollbar md:w-auto">
             <div className="inline-flex items-center space-x-3 bg-white px-5 py-3 md:px-6 md:py-4 rounded-full shadow-md border border-gray-100 whitespace-nowrap min-w-min">
-              <span className="font-bold text-primary text-base md:text-lg">Serving</span>
+              <span className="font-bold text-primary text-base md:text-lg">{t("about.serving")}</span>
               <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent" />
-              <span className="font-medium text-gray-700 text-sm md:text-base">Jeddah</span>
+              <span className="font-medium text-gray-700 text-sm md:text-base">{t("cities.jeddah")}</span>
               <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent" />
-              <span className="font-medium text-gray-700 text-sm md:text-base">Mecca</span>
+              <span className="font-medium text-gray-700 text-sm md:text-base">{t("cities.mecca")}</span>
               <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent" />
-              <span className="font-medium text-gray-700 text-sm md:text-base">Madinah</span>
+              <span className="font-medium text-gray-700 text-sm md:text-base">{t("cities.madinah")}</span>
             </div>
           </div>
 
@@ -219,7 +219,7 @@ export default function About() {
                     <span>{stat.suffix}</span>
                   </div>
                   <p className="text-gray-600 font-medium text-xs md:text-sm leading-tight group-hover:text-primary transition-colors">
-                    {stat.sub}
+                    {stat.label}
                   </p>
                 </div>
               </div>

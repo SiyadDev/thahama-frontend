@@ -23,12 +23,20 @@
         "rights": "All rights reserved."
     },
     "hero": {
-        "freshness": "Freshness Everyday"
+        "brandName": "THAHAMA",
+        "brandSuffix": ":market",
+        "freshness": "Freshness Everyday",
+        "openingHours": "Opening Hours",
+        "quality": "Quality",
+        "premiumFresh": "Premium Fresh",
+        "hours247": "24 Hours / 7 Days"
     },
     "about": {
         "title": "About",
         "titleHighlight": "Thahama Market",
         "whoWeAre": "Who We Are",
+        "ourStory": "Our Story",
+        "serving": "Serving",
         "p1": "THAHAMA:market is the fastest-growing supermarket chain in Saudi Arabia and the UAE, dedicated to providing the highest quality products and exceptional customer service.",
         "p2": "Our commitment to freshness, quality, and community has made us a trusted name across the region. From fresh produce to household essentials, we ensure every product meets our rigorous standards.",
         "p3": "With multiple branches strategically located throughout Jeddah and expanding to the UAE, we're bringing premium shopping experiences closer to you.",
@@ -44,7 +52,13 @@
     "services": {
         "title": "Our",
         "titleHighlight": "Services",
+        "ourExpertise": "Our Expertise",
         "subtitle": "Everything you need, all in one place. Experience convenience like never before.",
+        "exploreService": "Explore Service",
+        "servicesVaryNote": "Services may vary by location. Please check with your local branch.",
+        "comingSoonDesc": "We are working hard to bring this service to you soon.",
+        "availableAtAll": "Experience our premium quality and dedicated service at all our branches.",
+        "availableAtSelect": "Currently available at select locations",
         "items": {
             "shopping": {
                 "title": "In-Store Shopping",
@@ -86,6 +100,8 @@
         },
         "stayTuned": "Stay tuned for opening date!",
         "getDirections": "Get Directions",
+        "viewAll": "View All",
+        "locations": "Locations",
         "items": {
             "hamdaniyah": {
                 "name": "Al-Hamdaniyah Branch",
@@ -137,11 +153,13 @@
         "titleHighlight": "Customers Say",
         "subtitle": "Join thousands of satisfied customers who trust us for their daily needs",
         "tapToRead": "Tap to read more",
+        "customer": "Customer",
         "roles": {
             "regular": "Regular Customer",
             "loyal": "Loyal Member",
             "happy": "Happy Shopper",
-            "verified": "Verified Buyer"
+            "verified": "Verified Buyer",
+            "customer": "Customer"
         },
         "items": {
             "ahmed": "Best supermarket in Jeddah! Fresh products, excellent service, and great prices. My family shops here every week.",
@@ -203,8 +221,30 @@
     },
     "cities": {
         "jeddah": "Jeddah",
+        "mecca": "Mecca",
+        "madinah": "Madinah",
         "alqahma": "Al-Qahma",
         "dubai": "Dubai",
         "abudhabi": "Abu Dhabi"
+    },
+    "status": {
+        "available": "Available",
+        "selectLocations": "Select Locations",
+        "comingSoon": "Coming Soon"
+    },
+    "locations": {
+        "title": "Our Locations",
+        "storesFound": "stores found",
+        "searchPlaceholder": "Search city, district or street...",
+        "filterAll": "All",
+        "noStores": "No stores found matching your criteria.",
+        "directions": "Directions",
+        "call": "Call",
+        "showMap": "Show Map",
+        "viewList": "View List",
+        "status": {
+            "open": "Open",
+            "comingSoon": "Coming Soon"
+        }
     }
 }

@@ -43,14 +43,14 @@ const COORDINATES_MAP: Record<string, { lat: number; lng: number }> = {
 };
 
 // --- Mock Data ---
-const generateStores = (): StoreLocation[] => {
+const generateStores = (language: 'en' | 'ar'): StoreLocation[] => {
     return siteContent.branches.map((branch, index) => {
         // Try to find a matching location for coordinates
         let coords = { lat: 21.4858, lng: 39.1925 }; // Default to Jeddah
 
         // Simple string matching for coordinates
         for (const [key, val] of Object.entries(COORDINATES_MAP)) {
-            if (branch.address.includes(key) || branch.nameEn.includes(key) || branch.nameAr.includes(key)) {
+            if (branch.addressEn.includes(key) || branch.nameEn.includes(key) || branch.nameAr.includes(key)) {
                 coords = val;
                 break;
             }
@@ -62,11 +62,11 @@ const generateStores = (): StoreLocation[] => {
 
         return {
             id: `store-${index + 1}`,
-            name: branch.nameEn,
-            city: branch.address.split(',')[0] || "Unknown", // Approximate city from address
-            address: branch.address,
+            name: language === 'ar' ? branch.nameAr : branch.nameEn,
+            city: (language === 'ar' ? branch.addressAr : branch.addressEn).split(',')[0] || "Unknown",
+            address: language === 'ar' ? branch.addressAr : branch.addressEn,
             phone: branch.phone,
-            hours: branch.hours,
+            hours: language === 'ar' ? branch.hoursAr : branch.hoursEn,
             status: branch.status === "open" ? "open" : "coming_soon",
             lat: coords.lat + latOffset,
             lng: coords.lng + lngOffset,
@@ -74,9 +74,7 @@ const generateStores = (): StoreLocation[] => {
     });
 };
 
-const STORES_DATA = generateStores();
-// Derive unique cities from the data for the filter
-const CITIES = ["All", ...Array.from(new Set(STORES_DATA.map(s => s.city)))].sort();
+// STORES_DATA will be generated dynamically based on language
 
 // --- Map Component (Client Side Only) ---
 // We define this inside to avoid SSR issues with Leaflet
@@ -193,7 +191,7 @@ const DynamicLeafletMap = dynamic(() => Promise.resolve(LeafletMap), {
 
 // --- Main Store Locator Component ---
 export default function StoreLocator() {
-    const { t, dir } = useLanguage();
+    const { t, dir, language } = useLanguage();
     const [selectedCity, setSelectedCity] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedStore, setSelectedStore] = useState<string | null>(null);
@@ -201,15 +199,23 @@ export default function StoreLocator() {
 
     const listRef = useRef<HTMLDivElement>(null);
 
+    // Generate stores based on current language
+    const STORES_DATA = useMemo(() => generateStores(language), [language]);
+    const CITIES = useMemo(() => {
+        const allLabel = t('locations.filterAll');
+        return [allLabel, ...Array.from(new Set(STORES_DATA.map(s => s.city)))].sort();
+    }, [STORES_DATA, t]);
+
     // Filter stores
     const filteredStores = useMemo(() => {
+        const allLabel = t('locations.filterAll');
         return STORES_DATA.filter(store => {
-            const matchesCity = selectedCity === "All" || store.city === selectedCity;
+            const matchesCity = selectedCity === allLabel || store.city === selectedCity;
             const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 store.address.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCity && matchesSearch;
         });
-    }, [selectedCity, searchQuery]);
+    }, [selectedCity, searchQuery, STORES_DATA, t]);
 
     // Handle store selection
     const handleStoreSelect = (storeId: string) => {
@@ -218,6 +224,11 @@ export default function StoreLocator() {
             setIsMobileListOpen(false); // Close list on mobile to show map
         }
     };
+
+    // Reset city filter when language changes
+    useEffect(() => {
+        setSelectedCity(t('locations.filterAll'));
+    }, [language, t]);
 
     // GSAP Animations
     useEffect(() => {
@@ -267,17 +278,17 @@ export default function StoreLocator() {
                 {/* Header Section */}
                 <div className="p-6 md:pt-16 pb-4 border-b border-gray-100 bg-white/50 space-y-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-primary mb-1">Our Locations</h1>
-                        <p className="text-sm text-gray-500">{filteredStores.length} stores found</p>
+                        <h1 className="text-2xl font-bold text-primary mb-1">{t('locations.title')}</h1>
+                        <p className="text-sm text-gray-500">{filteredStores.length} {t('locations.storesFound')}</p>
                     </div>
 
                     {/* Search Bar */}
                     <div className="relative">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <FiSearch className={`absolute ${dir === 'rtl' ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 text-gray-400`} />
                         <input
                             type="text"
-                            placeholder="Search city, district or street..."
-                            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
+                            placeholder={t('locations.searchPlaceholder')}
+                            className={`w-full ${dir === 'rtl' ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all`}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -307,7 +318,7 @@ export default function StoreLocator() {
                     {filteredStores.length === 0 ? (
                         <div className="text-center py-10 text-gray-500">
                             <FiSearch className="mx-auto text-4xl mb-3 opacity-20" />
-                            <p>No stores found matching your criteria.</p>
+                            <p>{t('locations.noStores')}</p>
                         </div>
                     ) : (
                         filteredStores.map(store => (
@@ -330,9 +341,9 @@ export default function StoreLocator() {
                                         {store.name}
                                     </h3>
                                     {store.status === "open" ? (
-                                        <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium">Open</span>
+                                        <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium">{t('locations.status.open')}</span>
                                     ) : (
-                                        <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
+                                        <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-medium">{t('locations.status.comingSoon')}</span>
                                     )}
                                 </div>
 
@@ -350,10 +361,10 @@ export default function StoreLocator() {
                                 {selectedStore === store.id && (
                                     <div className="mt-4 pt-3 border-t border-gray-100 flex gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                                         <button className="flex-1 bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-                                            <FiNavigation /> Directions
+                                            <FiNavigation /> {t('locations.directions')}
                                         </button>
                                         <button className="flex-1 bg-gray-100 text-primary py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-                                            <FiPhone /> Call
+                                            <FiPhone /> {t('locations.call')}
                                         </button>
                                     </div>
                                 )}
@@ -393,11 +404,11 @@ export default function StoreLocator() {
             >
                 {isMobileListOpen ? (
                     <>
-                        <FiMap /> Show Map
+                        <FiMap /> {t('locations.showMap')}
                     </>
                 ) : (
                     <>
-                        <FiFilter /> View List
+                        <FiFilter /> {t('locations.viewList')}
                     </>
                 )}
             </button>

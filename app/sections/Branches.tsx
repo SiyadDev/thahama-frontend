@@ -84,7 +84,7 @@ function BranchesContent() {
       {activeServiceTitle && (
         <div className="flex justify-center mb-8 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 px-4 py-2 rounded-full text-accent font-medium">
-            <span>Filtering by service: <strong>{activeServiceTitle}</strong></span>
+            <span>Filtering by service: <strong>{language === 'ar' ? activeServiceTitle.ar : activeServiceTitle.en}</strong></span>
             <button
               onClick={clearFilter}
               className="hover:bg-accent/20 p-1 rounded-full transition-colors"
@@ -136,7 +136,9 @@ function BranchesContent() {
                 <div className="flex items-start gap-3">
                   <FiMapPin className="text-accent text-xl mt-1 shrink-0" />
                   <div>
-                    <p className="text-gray-600 text-sm">{branch.address}</p>
+                    <p className="text-gray-600 text-sm">
+                      {language === 'ar' ? branch.addressAr : branch.addressEn}
+                    </p>
                   </div>
                 </div>
 
@@ -158,7 +160,9 @@ function BranchesContent() {
 
                     <div className="flex items-center gap-3">
                       <FiClock className="text-accent text-xl shrink-0" />
-                      <p className="text-gray-600">{branch.hours}</p>
+                      <p className="text-gray-600">
+                        {language === 'ar' ? branch.hoursAr : branch.hoursEn}
+                      </p>
                     </div>
                   </>
                 )}
@@ -184,7 +188,7 @@ function BranchesContent() {
           href="/locations"
           className="inline-flex items-center gap-2 bg-white text-primary px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 group border border-gray-100"
         >
-          View All {siteContent.statistics.branches} Locations
+          {t("branches.viewAll")} {siteContent.statistics.branches} {t("branches.locations")}
           <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>

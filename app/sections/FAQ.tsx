@@ -9,11 +9,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import { siteContent } from "@/app/data/siteContent";
+import { getLocalizedContent } from "@/app/lib/i18n-utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FAQ() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,7 +112,7 @@ export default function FAQ() {
               >
                 <span className={`text-lg md:text-xl font-bold transition-colors duration-300 ${openIndex === index ? "text-accent" : "text-primary"
                   }`}>
-                  {item.question}
+                  {getLocalizedContent(item.question, language)}
                 </span>
                 <span className={`ml-4 rtl:mr-4 rtl:ml-0 transform transition-transform duration-300 text-accent text-xl ${openIndex === index ? "rotate-180" : ""
                   }`}>
@@ -124,7 +125,7 @@ export default function FAQ() {
                   }`}
               >
                 <div className="px-6 pb-6 text-gray-600 leading-relaxed">
-                  {item.answer}
+                  {getLocalizedContent(item.answer, language)}
                 </div>
               </div>
             </div>

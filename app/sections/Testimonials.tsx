@@ -7,6 +7,7 @@ import { FiStar } from "react-icons/fi";
 import Image from "next/image";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import { siteContent } from "@/app/data/siteContent";
+import { getLocalizedContent } from "@/app/lib/i18n-utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,18 +26,19 @@ interface TestimonialItem {
 // Convert siteContent.testimonials to compatible format
 // Since siteContent.testimonials is empty, this will be empty array
 // If it had data, we would map it here.
-const testimonialsConfig: TestimonialItem[] = siteContent.testimonials.map((t, i) => ({
+const getTestimonialsConfig = (language: 'en' | 'ar'): TestimonialItem[] => siteContent.testimonials.map((t, i) => ({
   id: `t-${i}`,
   name: t.nameEn || "",
   nameArabic: t.nameAr || "",
   rating: t.rating || 5,
   image: "/images/person1.png", // Default placeholder
-  review: t.review || "",
+  review: typeof t.review === 'string' ? t.review : getLocalizedContent(t.review, language),
   role: "Customer" // Default
 }));
 
 export default function Testimonials() {
   const { t, language } = useLanguage();
+  const testimonialsConfig = getTestimonialsConfig(language);
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -201,7 +203,7 @@ export default function Testimonials() {
             {language === 'ar' ? testimonial.nameArabic : testimonial.name}
           </h4>
           <p className="text-accent text-xs font-medium">
-            {testimonial.role}
+            {t("testimonials.customer")}
           </p>
         </div>
       </div>
@@ -276,7 +278,7 @@ export default function Testimonials() {
                       {language === 'ar' ? testimonial.nameArabic : testimonial.name}
                     </h4>
                     <p className="text-accent text-xs font-medium">
-                      {testimonial.role}
+                      {t("testimonials.customer")}
                     </p>
                   </div>
                 </div>

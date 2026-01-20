@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { siteContent } from "@/app/data/siteContent";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import SectionWrapper from "@/app/components/ui/SectionWrapper";
+import { getLocalizedContent } from "@/app/lib/i18n-utils";
 import { createGSAPContext, createStaggerAnimation } from "@/app/lib/gsap-utils";
 import { useDevice } from "@/app/hooks/useDevice";
 import { FiCheck, FiClock, FiMapPin, FiArrowRight, FiInfo } from "react-icons/fi";
@@ -27,29 +28,7 @@ const getStatusFromDescription = (desc: string): ServiceStatus => {
   return "available";
 };
 
-const statusConfig: Record<ServiceStatus, StatusConfig> = {
-  available: {
-    label: "Available",
-    color: "text-emerald-700",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    icon: FiCheck,
-  },
-  limited: {
-    label: "Select Locations",
-    color: "text-amber-700",
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    icon: FiMapPin,
-  },
-  coming_soon: {
-    label: "Coming Soon",
-    color: "text-slate-500",
-    bg: "bg-slate-50",
-    border: "border-slate-200",
-    icon: FiClock,
-  },
-};
+// Move statusConfig inside component to access t() function
 
 // --- Spotlight Card Component ---
 
@@ -99,8 +78,33 @@ const SpotlightCard = ({
 };
 
 export default function Services() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Define status config inside component to access t() function
+  const statusConfig: Record<ServiceStatus, StatusConfig> = {
+    available: {
+      label: t("status.available"),
+      color: "text-emerald-700",
+      bg: "bg-emerald-50",
+      border: "border-emerald-200",
+      icon: FiCheck,
+    },
+    limited: {
+      label: t("status.selectLocations"),
+      color: "text-amber-700",
+      bg: "bg-amber-50",
+      border: "border-amber-200",
+      icon: FiMapPin,
+    },
+    coming_soon: {
+      label: t("status.comingSoon"),
+      color: "text-slate-500",
+      bg: "bg-slate-50",
+      border: "border-slate-200",
+      icon: FiClock,
+    },
+  };
 
   useEffect(() => {
     const cleanup = createGSAPContext(() => {
@@ -135,7 +139,7 @@ export default function Services() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold tracking-wider uppercase mb-6">
               <span className="w-2 h-2 rounded-full bg-accent"></span>
-              Our Expertise
+              {t("services.ourExpertise")}
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1]">
               {t("services.title")} <br className="hidden md:block" />
@@ -160,7 +164,7 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {siteContent.services.map((service) => {
             const Icon = service.icon;
-            const status = getStatusFromDescription(service.description);
+            const status = getStatusFromDescription(typeof service.description === 'string' ? service.description : getLocalizedContent(service.description, language));
             const statusInfo = statusConfig[status];
             const StatusIcon = statusInfo.icon;
 
@@ -191,21 +195,21 @@ export default function Services() {
                       {/* Content */}
                       <div className="flex-1">
                         <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 md:mb-3 md:group-hover:text-accent transition-colors duration-300">
-                          {service.title}
+                          {getLocalizedContent(service.title, language)}
                         </h3>
 
                         <p className="text-slate-500 text-sm leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
                           {status === "coming_soon"
-                            ? "We are working hard to bring this service to you soon."
+                            ? t("services.comingSoonDesc")
                             : status === "limited"
-                              ? `Currently available at select locations: ${service.description.replace("Only in ", "").replace("Yes ", "")}`
-                              : "Experience our premium quality and dedicated service at all our branches."}
+                              ? `${t("services.availableAtSelect")}: ${getLocalizedContent(service.description, language).replace("Only in ", "").replace("Yes ", "")}`
+                              : t("services.availableAtAll")}
                         </p>
                       </div>
 
                       {/* Bottom Action */}
                       <div className="mt-auto pt-4 md:pt-6 border-t border-slate-50 flex items-center text-sm font-semibold text-slate-400 md:group-hover:text-primary transition-colors duration-300 cursor-pointer">
-                        <span className="mr-2">Explore Service</span>
+                        <span className="mr-2">{t("services.exploreService")}</span>
                         <FiArrowRight className="w-4 h-4 transform md:group-hover:translate-x-1 transition-transform duration-300 text-accent" />
                       </div>
                     </div>
@@ -220,7 +224,7 @@ export default function Services() {
         <div className="mt-16 text-center">
           <p className="text-slate-400 text-sm flex items-center justify-center gap-2">
             <FiInfo className="w-4 h-4" />
-            Services may vary by location. Please check with your local branch.
+            {t("services.servicesVaryNote")}
           </p>
         </div>
 
